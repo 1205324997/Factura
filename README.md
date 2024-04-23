@@ -1,4 +1,4 @@
-# Skote -  Angular 13 Responsive Admin Dashboard Template 
+# Skote -  Angular 17 Responsive Admin Dashboard Template 
 
 ## Development server
 
