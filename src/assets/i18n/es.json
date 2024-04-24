@@ -153,12 +153,7 @@
     "INVOICES": {
       "TEXT": "Facturas",
       "LIST": {
-        "INVOICELIST": "Facturas",
-        "CREDINOTES": "Notas de credito",
-        "DEBITNOTES": "Notas de debito", 
-        "PURCHASESETTLEMENTS": "Liquidaciones de compras",
-        "WITHHOLDINGRECEIPTS": "Comprobantes de retención",
-        "DISPATCHGUIDES": "Guias de Remisión"
+        "INVOICELIST": "Comprobante Electronico"
       }
     },    
     "PROJECTS": {

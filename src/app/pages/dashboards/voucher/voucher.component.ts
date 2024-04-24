@@ -6,55 +6,114 @@ import jsPDF from 'jspdf';
 @Component({
   selector: 'app-voucher',
   templateUrl: './voucher.component.html',
-  styleUrls: ['./voucher.component.scss']
+ 
 })
 export class VoucherComponent implements OnInit {
   vouchers: any[] = [];
-  allVouchers: any[] = [];
   filteredVouchers: any[] = [];
   vouchersVisible: boolean = false;
-  filtroEstados: string = '';
-  estadoNoEncontradoMensaje: string = '';
-  filtroTipoFactura: string = 'Factura';
+  filtroTipoFactura: string = 'Facturas'; 
   estadosDisponibles: string[] = [''];
-  facturasNoEncontradasMensaje: string = '';
+  
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
-    console.log("Invoice component initialized.");
+    console.log("Componente Voucher inicializado.");
     this.obtenerVouchers();
-  
-    // Verify invoices upon initialization
-    if (this.filteredVouchers.length === 0 && this.filtroEstados.trim() === '') {
-      this.facturasNoEncontradasMensaje = "No existen facturas para mostrar.";
-    }
   }
+
+  capitalizePipe = {
+    transform(value: string): string {
+      if (!value) return value;
+      return value.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+    }
+  };
 
   obtenerVouchers(): void {
     const params = new HttpParams()
       .set('pageSize', '100')
       .set('startIndex', '0')
-      .set('tipoFactura', this.filtroTipoFactura);
+      .set('tipoFactura', this.filtroTipoFactura); 
 
     this.apiService.getVouchers(params).subscribe(
       (response: any[]) => {
         this.vouchers = response;
-        this.allVouchers = response; 
-        this.filtrarVouchersPorTipoFactura();
-        console.log("Invoice obtained:", this.vouchers);
+        this.filtrarVouchersPorTipoFactura(); 
+        console.log("Respuesta del servicio recibida:", this.vouchers);
       },
       (error) => {
-        console.error('Error obtaining invoice:', error);
+        console.error('Error al obtener vouchers:', error);
       }
     );
   }
 
   filtrarVouchers(tipoFactura: string): void {
-    console.log("Type of invoice select:", tipoFactura);
+    console.log("Tipo de factura seleccionado:", tipoFactura);
     this.filtroTipoFactura = tipoFactura;
     this.filtrarVouchersPorTipoFactura();
-    this.filtrarPorEstado(this.filtroEstados);
+  }
+  
+  filtrarVouchersPorTipoFactura(): void {
+    const tipoFacturaMap = {
+      'Facturas': 'FACTURA',
+      'Notas de crédito': 'NOTA_CREDITO',
+      'Notas de débito': 'NOTA_DEBITO',
+      'Liquidaciones de compras de bienes y prestación de servicios': 'LIQUIDACION_COMPRA',
+      'Comprobantes de retención': 'COMPROBANTE_RETENCION',
+      'Guías de remisión': 'GUIA_REMISION'
+    };
+  
+    const tipoFactura = tipoFacturaMap[this.filtroTipoFactura];
+  
+    if (tipoFactura) {
+      this.filteredVouchers = this.vouchers.filter(voucher => voucher.voucherType === tipoFactura);
+    } else {
+      this.filteredVouchers = [];
+    }
+  
+    this.vouchersVisible = this.filteredVouchers.length > 0;
+  }
+    
+
+  filtrarPorEstado(estado: string): void {
+    if (estado.trim() === '') {
+      this.filteredVouchers = this.vouchers;
+    } else {
+      this.filteredVouchers = this.vouchers.filter(voucher => voucher.status === estado);
+    }
+  }
+  
+  filtrarPorFechas(): void {
+    const fechaDesde = (document.getElementById('fechaDesde') as HTMLInputElement).value;
+    const fechaHasta = (document.getElementById('fechaHasta') as HTMLInputElement).value;
+  
+    if (fechaDesde && fechaHasta) {
+      this.filteredVouchers = this.vouchers.filter(voucher => {
+        const fechaVoucher = new Date(voucher.broadcastDate);
+        const fechaDesdeObj = new Date(fechaDesde);
+        const fechaHastaObj = new Date(fechaHasta);
+  
+        return fechaVoucher >= fechaDesdeObj && fechaVoucher <= fechaHastaObj;
+      });
+    } else {
+      
+      this.filteredVouchers = this.vouchers;
+    }
+  }
+  
+
+  filtrarPorRuc(ruc: string): void {
+    if (ruc.trim() === '') {
+      this.filteredVouchers = this.vouchers;
+    } else {
+      this.filteredVouchers = this.vouchers.filter(voucher => voucher.ruc.includes(ruc.trim()));
+    }
+  }
+    
+  mostrarTodasLasFacturas(): void {
+    this.filteredVouchers = this.vouchers; 
+    this.vouchersVisible = true; 
   }
 
   descargarPDF(voucher: any): void {
@@ -73,75 +132,4 @@ export class VoucherComponent implements OnInit {
     doc.text(voucherTexto, 10, 10);
     doc.save(`voucher_${voucher.id}.pdf`);
   }
-
-  filtrarVouchersPorTipoFactura(): void {
-    const tipoFacturaBuscado = 'FACTURA';
-  
-    if (tipoFacturaBuscado) {
-      this.filteredVouchers = this.allVouchers.filter(voucher => voucher.voucherType === tipoFacturaBuscado);
-    } else {
-      this.filteredVouchers = [];
-    }
-  
-    this.vouchersVisible = this.filteredVouchers.length > 0;
-  }
-  
-  filtrarPorEstado(estado: string): void {
-    this.filtroEstados = estado;
-  
-    if (estado.trim() === '') {
-      this.facturasNoEncontradasMensaje = `No se encontraron facturas del tipo "${this.filtroTipoFactura}".`;
-      this.filteredVouchers = [];
-    } else {
-      this.filteredVouchers = this.allVouchers.filter(voucher => voucher.voucherType === 'FACTURA' && voucher.status === estado.trim());
-      this.facturasNoEncontradasMensaje = '';
-    }
-  
-    if (this.filteredVouchers.length > 0) {
-      this.estadoNoEncontradoMensaje = '';
-    } else {
-      this.estadoNoEncontradoMensaje = `No existen notas de crédito con el estado "${estado}".`;
-    }
-  
-    this.actualizarListaFiltrada();
-  }
-  
-
-  actualizarListaFiltrada(): void {
-    if (this.filtroEstados.trim() === '') {
-      this.vouchersVisible = false;
-      this.filteredVouchers = [];
-    } else {
-      this.vouchersVisible = this.filteredVouchers.length > 0;
-    }
-  }
-
-  //Filter type voucher 
-  /* filtrarVouchersPorTipoFactura(): void {
-    const tiposFactura = {
-      'Facturas': 'FACTURA',
-      'Notas de crédito': 'NOTA_CREDITO',
-      'Notas de débito': 'NOTA_DEBITO',
-      'Liquidaciones de compras de bienes y prestación de servicios': 'LIQUIDACION_COMPRA',
-      'Comprobantes de retención': 'COMPROBANTE_RETENCION',
-      'Guías de remisión': 'GUIA_REMISION'
-    };
-  
-  const tipoFacturaBuscado = tiposFactura[this.filtroTipoFactura];*/
-  
-  
-  /*filtrarPorRuc(ruc: string): void {
-    if (ruc.trim() === '') {
-      this.filteredVouchers = this.vouchers;
-    } else {
-      this.filteredVouchers = this.vouchers.filter(voucher => voucher.ruc.includes(ruc.trim()));
-    }
-  }
-    
-  mostrarTodasLasFacturas(): void {
-    this.filteredVouchers = this.vouchers; 
-    this.vouchersVisible = true; 
-  }*/
-
-  
 }

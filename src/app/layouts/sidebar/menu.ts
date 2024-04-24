@@ -22,36 +22,7 @@ export const MENU: MenuItem[] = [
                 link: '/voucher',
                 parentId: 6
             },
-            {
-                id: 8,
-                label: 'MENUITEMS.INVOICES.LIST.CREDINOTES',
-                link: '/creditNotes',
-                parentId: 6
-            },
-            {
-                id: 9,
-                label: 'MENUITEMS.INVOICES.LIST.DEBITNOTES',
-                link: '/debitNotes',
-                parentId: 6
-            },
-            {
-                id: 10,
-                label: 'MENUITEMS.INVOICES.LIST.PURCHASESETTLEMENTS',
-                link: '/liquidation',
-                parentId: 6
-            },
-            {
-                id: 11,
-                label: 'MENUITEMS.INVOICES.LIST.WITHHOLDINGRECEIPTS',
-                link: '/withholding',
-                parentId: 6
-            },
-            {
-                id: 12,
-                label: 'MENUITEMS.INVOICES.LIST.DISPATCHGUIDES',
-                link: '/guide',
-                parentId: 6
-            },
+         
         ]
     }
 ];
