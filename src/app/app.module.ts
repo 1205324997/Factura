@@ -36,7 +36,8 @@ import { FakeBackendInterceptor } from './core/helpers/fake-backend';
 import { rootReducer } from './store';
 import { AuthenticationEffects } from './store/Authentication/authentication.effects';
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth'; 
+import { VoucherComponent } from './voucher/voucher.component';
 if (environment.defaultauth === 'firebase') {
   initFirebaseBackend(environment.firebaseConfig);
 } else {
@@ -52,6 +53,7 @@ export function createTranslateLoader(http: HttpClient): any {
   declarations: [
     AppComponent,
     CyptolandingComponent,
+    VoucherComponent,
   ],
   imports: [
     BrowserModule,

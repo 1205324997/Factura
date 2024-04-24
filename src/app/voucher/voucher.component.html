@@ -1,0 +1,37 @@
+<div>
+  <button (click)="mostrarVouchers()">Mostrar Vouchers</button>
+</div>
+
+<div *ngIf="vouchersVisible">
+    <table>
+      <thead>
+        <tr>
+          <th>Voucher Type</th>
+          <th>Business Name</th>
+          <th>RUC</th>
+          <th>Branch Office Code</th>
+          <th>Branch Office Name</th>
+          <th>Status </th>
+          <th>Status SRI</th>
+          <th>Broadcast Date</th>
+          <!-- Agrega más columnas según sea necesario -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let voucher of vouchers">
+          <td>{{ voucher.voucherType }}</td>
+          <td>{{ voucher.businessName }}</td>
+          <td>{{ voucher.ruc }}</td>
+          <td>{{ voucher.branchOfficeCode }}</td>
+          <td>{{ voucher.branchOfficeName }}</td>
+          <td>{{ voucher.status }}</td>
+          <td>{{ voucher.statusSri}}</td>
+          <td>{{ voucher.broadcastDate }}</td>
+          <!-- Agrega más celdas según sea necesario -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<div *ngIf="!(vouchersVisible)">
+  <p>No se encontraron vouchers.</p>
+</div>
