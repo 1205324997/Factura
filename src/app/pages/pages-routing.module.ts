@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { DefaultComponent } from './dashboards/default/default.component';
+import { VoucherComponent } from '../voucher/voucher.component';
 
 const routes: Routes = [
   // { path: '', redirectTo: 'dashboard' },
@@ -10,6 +11,7 @@ const routes: Routes = [
     component: DefaultComponent
   },
   { path: 'dashboard', component: DefaultComponent },
+  { path: 'voucher', component: VoucherComponent },
   { path: 'dashboards', loadChildren: () => import('./dashboards/dashboards.module').then(m => m.DashboardsModule) },
 ];
 

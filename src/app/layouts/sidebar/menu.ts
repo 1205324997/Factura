@@ -231,7 +231,7 @@ export const MENU: MenuItem[] = [
             {
                 id: 38,
                 label: 'MENUITEMS.INVOICES.LIST.INVOICELIST',
-                link: '/',
+                link: '/voucher',
                 parentId: 37
             },
             {
@@ -281,7 +281,7 @@ export const MENU: MenuItem[] = [
             {
                 id: 46,
                 label: 'MENUITEMS.TASKS.LIST.TASKLIST',
-                link: '/',
+                link: '/voucher',
                 parentId: 45
             },
             {
