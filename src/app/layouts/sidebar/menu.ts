@@ -234,12 +234,12 @@ export const MENU: MenuItem[] = [
                 link: '/voucher',
                 parentId: 37
             },
-            {
-                id: 39,
-                label: 'MENUITEMS.INVOICES.LIST.INVOICEDETAIL',
-                link: '/',
-                parentId: 37
-            },
+           // {
+             //   id: 39,
+               // label: 'MENUITEMS.INVOICES.LIST.INVOICEDETAIL',
+                //link: '/',
+                //parentId: 37
+            //},
         ]
     },
     {

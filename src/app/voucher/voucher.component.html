@@ -1,33 +1,44 @@
-<div>
-  <button (click)="mostrarTodasLasFacturas()">Mostrar Todas las Facturas</button>
+<div class="container">
+  <div class="flex-container">
+    <div>
+      <button class="btn btn-primary" (click)="mostrarTodasLasFacturas()">Mostrar Todas las Facturas</button>
+  
+      <select id="tipoFactura" (change)="filtrarVouchers($event.target.value)">
+        <option value="" [hidden]="filtroTipoFactura !== null" disabled selected hidden>- Selecionar tipo de factura</option>
+        <option value="Facturas">Facturas</option>
+        <option value="Notas de crédito">Notas de crédito</option>
+        <option value="Notas de débito">Notas de débito</option>
+        <option value="Liquidaciones de compras de bienes y prestación de servicios">Liquidaciones de compras</option>
+        <option value="Comprobantes de retención">Comprobantes de retención</option>
+        <option value="Guías de remisión">Guías de remisión</option>
+      </select>
+    </div>
+
+    <div>
+      <div class="input-group">
+        <input type="text" id="buscarRuc" class="form-control form-control-sm" placeholder="Numero de RUC..." (input)="filtrarPorRuc($event.target.value)">
+        <div class="input-group-append">
+          <span class="input-group-text"><i class="fas fa-search"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div>
-  <label for="buscarRuc">Buscar por RUC:</label>
-  <input type="text" id="buscarRuc" (input)="filtrarPorRuc($event.target.value)">
-</div>
-
-<div>
-  <label for="tipoFactura">Seleccione tipo de factura:</label>
-  <select id="tipoFactura" (change)="filtrarVouchers($event.target.value)">
-    <option value="Facturas">Facturas</option>
-    <option value="Notas de crédito">Notas de crédito</option>
-    <option value="Notas de débito">Notas de débito</option>
-    <option value="Liquidaciones de compras de bienes y prestación de servicios">Liquidaciones de compras</option>
-    <option value="Comprobantes de retención">Comprobantes de retención</option>
-    <option value="Guías de remisión">Guías de remisión</option>
-  </select>
-</div>
 
 <div *ngIf="vouchersVisible" class="voucher-grid">
   <div class="voucher-card" *ngFor="let voucher of filteredVouchers">
     <div class="voucher-info">
       <p><strong>Tipo de Factura:</strong> {{ voucher.voucherType }}</p>
-      <p><strong>Nombre:</strong> {{ voucher.businessName }}</p>
+           <p><strong>Nombre:</strong> {{ voucher.businessName }}</p>
       <p><strong>RUC:</strong> {{ voucher.ruc }}</p>
       <p><strong>Estado:</strong> {{ voucher.status }}</p>
       <p><strong>Estado SRI:</strong> {{ voucher.statusSri }}</p>
       <p><strong>Fecha de factura:</strong> {{ voucher.broadcastDate }}</p>
+      <p><strong>Subtotal:</strong> {{ voucher.subtotal }}</p>     
+      <p><strong>IVA:</strong> {{ voucher.subtotalNotSubjectIVA }}</p>  
+      <p><strong>Total:</strong> {{ voucher.total}}</p>  
+
     </div>
   </div>
 </div>

@@ -5,8 +5,10 @@
   }
   
   .voucher-card {
-    border: 1px solid #ccc;
+    border: 1px solid #2a3042;
     padding: 20px;
+    border-radius: 10px;
+    background-color: #ffffff ;
   }
   
   .voucher-info {
@@ -17,3 +19,61 @@
     margin: 5px 0;
   }
   
+  .flex-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .flex-container > div {
+    flex: 1;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .input-group input {
+    margin-bottom: 10px;
+    height: 30px;
+    border-radius: 7px;
+  }
+  .input-group{
+   margin-top: 2%;
+  }
+button,
+select {
+    background-color: #2a3042;
+    border-radius: 9px;
+    margin: 2%;
+    padding: 5px;
+    color: white;
+    border-color: transparent;
+    transition: background-color 0.3s ease, color 0.3s ease; 
+}
+
+button:hover,
+select:hover {
+    background-color: #3a4052; 
+}
+
+button:active,
+select:active {
+    background-color: #1c2130;
+}
+
+button:focus,
+select:focus {
+    outline: none; 
+}
+
+.input-group input {
+    margin-bottom: 10px;
+    height: 30px;
+    border-radius: 7px;
+}
+
+span {
+    background-color: #2a3042;
+    color: white;
+}
+
