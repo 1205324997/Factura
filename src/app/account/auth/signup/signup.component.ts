@@ -31,6 +31,7 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
     this.signupForm = this.formBuilder.group({
       username: ['', Validators.required],
+      ruc: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
@@ -48,10 +49,11 @@ export class SignupComponent implements OnInit {
     // stop here if form is invalid
 
     const email = this.f['email'].value;
+    const ruc = this.f['ruc'].value;
     const name = this.f['username'].value;
     const password = this.f['password'].value;
 
     //Dispatch Action
-    this.store.dispatch(Register({ email: email, username: name, password: password }));
+    this.store.dispatch(Register({ email: email, username: name, password: password, ruc: ruc }));
   }
 }

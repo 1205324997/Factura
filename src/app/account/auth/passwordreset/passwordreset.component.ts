@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthenticationService } from '../../../core/services/auth.service';
 import { environment } from '../../../../environments/environment';
+import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-passwordreset',
@@ -54,9 +55,10 @@ export class PasswordresetComponent implements OnInit, AfterViewInit {
     }
     if (environment.defaultauth === 'firebase') {
       this.authenticationService.resetPassword(this.f.email.value)
-        .catch(error => {
-          this.error = error ? error : '';
-        });
-    }
+      .pipe(
+        catchError(error => {
+            return throwError(error);
+        })
+    )}
   }
 }

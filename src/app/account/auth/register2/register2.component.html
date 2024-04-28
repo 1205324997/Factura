@@ -97,6 +97,20 @@
                                     </div>
 
                                     <div class="mb-3">
+                                        <label for="ruc" class="form-label">RUC</label>
+                                      
+                                        <input type="number" formControlName="ruc" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.ruc.errors }" id="ruc" placeholder="RUC" />
+                                        @if(submitted && f.ruc.errors){
+                                          <div class="invalid-feedback">
+                                            @if(f.ruc.errors.required){
+                                              <div>RUC is required</div>
+                                            }
+                                          </div>
+                                        }
+                                      </div>
+                                      
+
+                                    <div class="mb-3">
                                         <label for="useremail">Email</label>
                                         <input type="email" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" class="form-control" id="useremail" placeholder="Enter email">
                                         @if(submitted && f.email.errors){

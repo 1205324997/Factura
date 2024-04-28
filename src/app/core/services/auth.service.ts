@@ -1,37 +1,33 @@
 import { Injectable } from '@angular/core';
-
-import { getFirebaseBackend } from '../../authUtils';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { User } from 'src/app/store/Authentication/auth.models';
-import { from, map } from 'rxjs';
-
+import { from } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-
 export class AuthenticationService {
 
-    user: User;
-
-    constructor() {
-    }
+    constructor(private afAuth: AngularFireAuth) { }
 
     /**
      * Returns the current user
      */
-    public currentUser(): User {
-        return getFirebaseBackend().getAuthenticatedUser();
+    public currentUser(): Promise<User | null> {
+        return new Promise((resolve, reject) => {
+            this.afAuth.onAuthStateChanged((user) => {
+                resolve(user);
+            }, (error) => {
+                reject(error);
+            });
+        });
     }
 
-
     /**
-     * Performs the auth
+     * Performs the login
      * @param email email of user
      * @param password password of user
      */
     login(email: string, password: string) {
-        return from(getFirebaseBackend().loginUser(email, password).pipe(map(user => {
-            return user;
-        }
-        )));
+        return from(this.afAuth.signInWithEmailAndPassword(email, password));
     }
 
     /**
@@ -39,13 +35,8 @@ export class AuthenticationService {
      * @param email email
      * @param password password
      */
-    register(user: User) {
-        // return from(getFirebaseBackend().registerUser(user));
-
-        return from(getFirebaseBackend().registerUser(user).then((response: any) => {
-            const user = response;
-            return user;
-        }));
+    register(email: string, password: string) {
+        return from(this.afAuth.createUserWithEmailAndPassword(email, password));
     }
 
     /**
@@ -53,18 +44,13 @@ export class AuthenticationService {
      * @param email email
      */
     resetPassword(email: string) {
-        return getFirebaseBackend().forgetPassword(email).then((response: any) => {
-            const message = response.data;
-            return message;
-        });
+        return from(this.afAuth.sendPasswordResetEmail(email));
     }
 
     /**
      * Logout the user
      */
     logout() {
-        // logout the user
-        getFirebaseBackend().logout();
+        return from(this.afAuth.signOut());
     }
 }
-

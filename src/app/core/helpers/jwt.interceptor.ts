@@ -5,7 +5,8 @@ import {
     HttpEvent,
     HttpInterceptor,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, from, throwError } from 'rxjs';
+import { switchMap, catchError } from 'rxjs/operators';
 
 import { AuthenticationService } from '../services/auth.service';
 import { AuthfakeauthenticationService } from '../services/authfake.service';
@@ -21,19 +22,29 @@ export class JwtInterceptor implements HttpInterceptor {
     intercept(
         request: HttpRequest<any>,
         next: HttpHandler
-    ): Observable<HttpEvent<any>> {
+    ): Observable<any> {
+        return from(this.handleRequest(request, next));
+    }
+
+    private async handleRequest(
+        request: HttpRequest<any>,
+        next: HttpHandler
+    ): Promise<any> {
         if (environment.defaultauth === 'firebase') {
-            // add authorization header with jwt token if available
-            let currentUser = this.authenticationService.currentUser();
-            if (currentUser && currentUser.token) {
-                request = request.clone({
-                    setHeaders: {
-                        Authorization: `Bearer ${currentUser.token}`,
-                    },
-                });
+            try {
+                const currentUser = await this.authenticationService.currentUser();
+                if (currentUser && currentUser.token) {
+                    request = request.clone({
+                        setHeaders: {
+                            Authorization: `Bearer ${currentUser.token}`,
+                        },
+                    });
+                }
+                return next.handle(request).toPromise();
+            } catch (error) {
+                return throwError(error);
             }
         } else {
-            // add authorization header with jwt token if available
             const currentUser = this.authfackservice.currentUserValue;
             if (currentUser && currentUser.token) {
                 request = request.clone({
@@ -42,7 +53,7 @@ export class JwtInterceptor implements HttpInterceptor {
                     },
                 });
             }
+            return next.handle(request).toPromise();
         }
-        return next.handle(request);
     }
 }

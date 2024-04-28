@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../../core/services/auth.service';
-import { AuthfakeauthenticationService } from '../../../core/services/authfake.service';
+//import { AuthfakeauthenticationService } from '../../../core/services/authfake.service';
 
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
   // tslint:disable-next-line: max-line-length
   constructor(private formBuilder: UntypedFormBuilder, private route: ActivatedRoute, private router: Router, private authenticationService: AuthenticationService, private store: Store,
-    private authFackservice: AuthfakeauthenticationService) { }
+    private authservice: AuthenticationService) { }
 
   ngOnInit() {
     if (localStorage.getItem('currentUser')) {
@@ -37,8 +37,8 @@ export class LoginComponent implements OnInit {
     }
     // form validation
     this.loginForm = this.formBuilder.group({
-      email: ['admin@themesbrand.com', [Validators.required, Validators.email]],
-      password: ['123456', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
     });
   }
 
@@ -51,11 +51,21 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
 
-    const email = this.f['email'].value; // Get the username from the form
-    const password = this.f['password'].value; // Get the password from the form
+    // Obtener los valores ingresados por el usuario
+    const email = this.f.email.value;
+    const password = this.f.password.value;
 
-    // Login Api
-    this.store.dispatch(login({ email: email, password: password }));
+    // Iniciar sesión con los valores ingresados
+    this.authenticationService.login(email, password).subscribe(
+      user => {
+        // Si la autenticación es exitosa, redirigir al usuario a la página principal
+        this.router.navigate(['/']);
+      },
+      error => {
+        // Si hay un error durante la autenticación, mostrar el mensaje de error
+        this.error = error.message || 'Error de autenticación';
+      }
+    );
   }
 
   /**

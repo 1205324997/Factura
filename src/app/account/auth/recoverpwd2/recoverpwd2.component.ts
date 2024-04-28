@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthenticationService } from '../../../core/services/auth.service';
 import { environment } from '../../../../environments/environment';
+import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-recoverpwd2',
@@ -45,9 +46,11 @@ export class Recoverpwd2Component implements OnInit {
     }
     if (environment.defaultauth === 'firebase') {
       this.authenticationService.resetPassword(this.f.email.value)
-        .catch(error => {
-          this.error = error ? error : '';
-        });
+      .pipe(
+        catchError(error => {
+            return throwError(error);
+        })
+    )
     }
   }
   // swiper config

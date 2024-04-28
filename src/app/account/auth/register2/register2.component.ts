@@ -31,6 +31,7 @@ export class Register2Component implements OnInit {
 
     this.signupForm = this.formBuilder.group({
       username: ['', Validators.required],
+      ruc: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
@@ -54,10 +55,11 @@ export class Register2Component implements OnInit {
     this.submitted = true;
 
     const email = this.f['email'].value;
+    const ruc = this.f['ruc'].value;
     const name = this.f['name'].value;
     const password = this.f['password'].value;
 
     //Dispatch Action
-    this.store.dispatch(Register({ email: email, username: name, password: password }));
+    this.store.dispatch(Register({ email: email, username: name, password: password, ruc: ruc }));
   }
 }
