@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { MENU } from './menu';
 import { MenuItem } from './menu.model';
 import { TranslateService } from '@ngx-translate/core';
-import { VoucherComponent } from 'src/app/voucher/voucher.component';
+import { VoucherComponent } from 'src/app/pages/dashboards/voucher/voucher.component';
 
 @Component({
   selector: 'app-sidebar',

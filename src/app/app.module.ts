@@ -36,10 +36,13 @@ import { FakeBackendInterceptor } from './core/helpers/fake-backend';
 import { rootReducer } from './store';
 import { AuthenticationEffects } from './store/Authentication/authentication.effects';
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth'; 
-import { VoucherComponent } from './voucher/voucher.component';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { provideFirebaseApp } from '@angular/fire/app';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { FirestoreComponent } from './firestore/firestore.component';
 if (environment.defaultauth === 'firebase') {
-  initFirebaseBackend(environment.firebaseConfig);
+  initFirebaseBackend(environment.firebaseConfig),
+  provideFirestore(() => getFirestore())
 } else {
   // tslint:disable-next-line: no-unused-expression
   FakeBackendInterceptor;
@@ -53,7 +56,6 @@ export function createTranslateLoader(http: HttpClient): any {
   declarations: [
     AppComponent,
     CyptolandingComponent,
-    VoucherComponent,
   ],
   imports: [
     BrowserModule,

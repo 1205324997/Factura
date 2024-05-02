@@ -153,8 +153,12 @@
     "INVOICES": {
       "TEXT": "Invoices",
       "LIST": {
-        "INVOICELIST": "Invoice List",
-        "INVOICEDETAIL": "Invoice Detail"
+        "INVOICELIST": "Invoice",
+        "CREDINOTES": "Credit Notes",
+        "DEBITNOTES": "Debit Notes", 
+        "PURCHASESETTLEMENTS": "Purchase Settlements",
+        "WITHHOLDINGRECEIPTS": "Withholding receipts", 
+        "DISPATCHGUIDES": "Dispatch guides"
       }
     },
     "PROJECTS": {

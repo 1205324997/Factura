@@ -17,9 +17,15 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { SimplebarAngularModule } from 'simplebar-angular';
 
 import { DefaultComponent } from './default/default.component';
+import { VoucherComponent } from 'src/app/pages/dashboards/voucher/voucher.component';
+import { CreditnotesComponent } from './creditnotes/creditnotes.component';
+import { DebitnotesComponent } from './debitnotes/debitnotes.component';
+import { LiquidationComponent } from './liquidation/liquidation.component';
+import { WithholdingComponent } from './withholding/withholding.component';
+import { GuideComponent } from './guide/guide.component';
 
 @NgModule({
-  declarations: [DefaultComponent],
+  declarations: [DefaultComponent, VoucherComponent, CreditnotesComponent, DebitnotesComponent, LiquidationComponent, WithholdingComponent, GuideComponent], 
   imports: [
     CommonModule,
     FormsModule,

@@ -8,6 +8,7 @@ import { first } from 'rxjs/operators';
 import { UserProfileService } from '../../../core/services/user.service';
 import { Store } from '@ngrx/store';
 import { Register } from 'src/app/store/Authentication/authentication.actions';
+import { FirestoreService } from 'src/app/core/services/firestore.service';
 
 @Component({
   selector: 'app-signup',
@@ -26,7 +27,7 @@ export class SignupComponent implements OnInit {
 
   // tslint:disable-next-line: max-line-length
   constructor(private formBuilder: UntypedFormBuilder, private route: ActivatedRoute, private router: Router, private authenticationService: AuthenticationService,
-    private userService: UserProfileService, public store: Store) { }
+    private userService: UserProfileService, public store: Store, private firestoreService: FirestoreService) { }
 
   ngOnInit() {
     this.signupForm = this.formBuilder.group({
@@ -55,5 +56,13 @@ export class SignupComponent implements OnInit {
 
     //Dispatch Action
     this.store.dispatch(Register({ email: email, username: name, password: password, ruc: ruc }));
+
+    this.firestoreService.addUser({ email, username: name, password, ruc })
+      .then(() => {
+        this.successmsg = true;
+      })
+      .catch(error => {
+        this.error = error.message;
+      });
   }
 }

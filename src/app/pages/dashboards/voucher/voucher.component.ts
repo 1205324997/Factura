@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../core/services/voucherapi.service';
+import { ApiService } from 'src/app/core/services/voucherapi.service';
 import { HttpParams } from '@angular/common/http';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-voucher',
@@ -16,7 +17,7 @@ export class VoucherComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
-    console.log("Componente Voucher inicializado.");
+    console.log("Invoice component initialized.");
     this.obtenerVouchers();
   }
 
@@ -30,34 +31,61 @@ export class VoucherComponent implements OnInit {
       (response: any[]) => {
         this.vouchers = response;
         this.filtrarVouchersPorTipoFactura(); 
-        console.log("Respuesta del servicio recibida:", this.vouchers);
+        console.log("Invoice obtained:", this.vouchers);
       },
       (error) => {
-        console.error('Error al obtener vouchers:', error);
+        console.error('Error obtaining invoice:', error);
       }
     );
   }
 
   filtrarVouchers(tipoFactura: string): void {
-    console.log("Tipo de factura seleccionado:", tipoFactura);
+    console.log("Type of invoice select:", tipoFactura);
     this.filtroTipoFactura = tipoFactura;
     this.filtrarVouchersPorTipoFactura();
   }
+  //Download PDF
   
+  descargarPDF(voucher: any): void {
+    const doc = new jsPDF();
+    const voucherTexto = `
+      Tipo de Factura: ${voucher.voucherType}
+      Nombre: ${voucher.businessName}
+      RUC: ${voucher.ruc}
+      Estado: ${voucher.status}
+      Estado SRI: ${voucher.statusSri}
+      Fecha de factura: ${voucher.broadcastDate}
+      Subtotal: ${voucher.subtotal}
+      IVA: ${voucher.subtotalNotSubjectIVA}
+      Total: ${voucher.total}
+    `;
+    doc.text(voucherTexto, 10, 10);
+    doc.save(`voucher_${voucher.id}.pdf`);
+  }
+
+  //Filter type voucher 
   filtrarVouchersPorTipoFactura(): void {
-    if (this.filtroTipoFactura === 'Facturas') {
-      this.filteredVouchers = this.vouchers.filter(voucher => voucher.voucherType === 'FACTURA');
-    } else if (this.filtroTipoFactura === 'Notas de crédito') {
-      this.filteredVouchers = this.vouchers.filter(voucher => voucher.voucherType === 'NOTA_CREDITO');
-    } else if (this.filtroTipoFactura === 'Notas de débito') {
-      this.filteredVouchers = this.vouchers.filter(voucher => voucher.voucherType === 'NOTA_DEBITO');
+    {/*const tiposFactura = {
+      'Facturas': 'FACTURA',
+      'Notas de crédito': 'NOTA_CREDITO',
+      'Notas de débito': 'NOTA_DEBITO',
+      'Liquidaciones de compras de bienes y prestación de servicios': 'LIQUIDACION_COMPRA',
+      'Comprobantes de retención': 'COMPROBANTE_RETENCION',
+      'Guías de remisión': 'GUIA_REMISION'
+    };
+  
+  const tipoFacturaBuscado = tiposFactura[this.filtroTipoFactura];*/}
+    const tipoFacturaBuscado ='FACTURA' ;
+  
+    if (tipoFacturaBuscado) {
+      this.filteredVouchers = this.vouchers.filter(voucher => voucher.voucherType === tipoFacturaBuscado);
     } else {
       this.filteredVouchers = [];
     }
     
     this.vouchersVisible = this.filteredVouchers.length > 0;
-  }  
-
+  }
+  
   filtrarPorRuc(ruc: string): void {
     if (ruc.trim() === '') {
       this.filteredVouchers = this.vouchers;

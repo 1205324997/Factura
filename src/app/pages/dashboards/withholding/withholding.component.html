@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="flex-container">
+    <div>
+
+<div *ngIf="vouchersVisible" class="voucher-grid">
+  <div class="voucher-card" *ngFor="let voucher of filteredVouchers">
+    <div class="voucher-info">
+      <p><strong>Tipo de Factura:</strong> {{ voucher.voucherType }}</p>
+      <p><strong>Nombre:</strong> {{ voucher.businessName }}</p>
+      <p><strong>RUC:</strong> {{ voucher.ruc }}</p>
+      <p><strong>Estado:</strong> {{ voucher.status }}</p>
+      <p><strong>Estado SRI:</strong> {{ voucher.statusSri }}</p>
+      <p><strong>Fecha de factura:</strong> {{ voucher.broadcastDate }}</p>
+      <p><strong>Subtotal:</strong> {{ voucher.subtotal }}</p>     
+      <p><strong>IVA:</strong> {{ voucher.subtotalNotSubjectIVA }}</p>  
+      <p><strong>Total:</strong> {{ voucher.total}}</p>  
+
+      <button class="btn btn-primary" (click)="descargarPDF(voucher)">PDF</button>
+
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="!(vouchersVisible)">
+  <p>No se encontraron vouchers.</p>
+</div>
