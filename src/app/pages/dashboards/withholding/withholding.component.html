@@ -2,7 +2,7 @@
   <div>
     <!-- filter for status-->
     <select id="tipoEstado" (change)="filtrarPorEstado($event.target.value)">
-      <option value="" disabled selected hidden>- Selecionar estado</option>
+      <option value="" disabled selected hidden>- Selecionar factura por estado</option>
       <option *ngFor="let estado of estadosDisponibles" [value]="estado">{{ estado }}</option>
       <option value="PENDIENTE">Pendiente de pago</option>
       <option value="AUTORIZADA">Autorizada para pago</option>
