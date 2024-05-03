@@ -28,8 +28,12 @@
           <p><strong>Subtotal:</strong> {{ voucher.subtotal }}</p>     
           <p><strong>IVA:</strong> {{ voucher.subtotalNotSubjectIVA }}</p>  
           <p><strong>Total:</strong> {{ voucher.total}}</p>  
+          
+           <!--Button of download-->
+          <button class="btn btn-primary" style="margin-right: auto; margin-left: 80;" (click)="descargarPDF(voucher)">PDF</button>
 
-          <button class="btn btn-primary" (click)="descargarPDF(voucher)">PDF</button>
+          <button (click)="enviarCorreo()">Enviar por correo</button>
+
         </div>
       </div>
     </div>

@@ -10,32 +10,38 @@ import jsPDF from 'jspdf';
 })
 export class VoucherComponent implements OnInit {
   vouchers: any[] = [];
+  allVouchers: any[] = [];
   filteredVouchers: any[] = [];
   vouchersVisible: boolean = false;
   filtroEstados: string = '';
   estadoNoEncontradoMensaje: string = '';
-  filtroTipoFactura: string = 'Factura'; 
-  estadosDisponibles: string[] = ['']; 
-  facturasNoEncontradasMensaje: string = ''; 
+  filtroTipoFactura: string = 'Factura';
+  estadosDisponibles: string[] = [''];
+  facturasNoEncontradasMensaje: string = '';
 
-
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     console.log("Invoice component initialized.");
     this.obtenerVouchers();
+  
+    // Verify invoices upon initialization
+    if (this.filteredVouchers.length === 0 && this.filtroEstados.trim() === '') {
+      this.facturasNoEncontradasMensaje = "No existen facturas para mostrar.";
+    }
   }
 
   obtenerVouchers(): void {
     const params = new HttpParams()
       .set('pageSize', '100')
       .set('startIndex', '0')
-      .set('tipoFactura', this.filtroTipoFactura); 
+      .set('tipoFactura', this.filtroTipoFactura);
 
     this.apiService.getVouchers(params).subscribe(
       (response: any[]) => {
         this.vouchers = response;
-        this.filtrarVouchersPorTipoFactura(); 
+        this.allVouchers = response; 
+        this.filtrarVouchersPorTipoFactura();
         console.log("Invoice obtained:", this.vouchers);
       },
       (error) => {
@@ -51,7 +57,6 @@ export class VoucherComponent implements OnInit {
     this.filtrarPorEstado(this.filtroEstados);
   }
 
-  //Download PDF
   descargarPDF(voucher: any): void {
     const doc = new jsPDF();
     const voucherTexto = `
@@ -69,37 +74,43 @@ export class VoucherComponent implements OnInit {
     doc.save(`voucher_${voucher.id}.pdf`);
   }
 
-  //Filter for type invoices
-  filtrarVouchersPorTipoFactura(): any[] {
+  filtrarVouchersPorTipoFactura(): void {
     const tipoFacturaBuscado = 'FACTURA';
-    return this.vouchers.filter(voucher => voucher.voucherType === tipoFacturaBuscado);
+  
+    if (tipoFacturaBuscado) {
+      this.filteredVouchers = this.allVouchers.filter(voucher => voucher.voucherType === tipoFacturaBuscado);
+    } else {
+      this.filteredVouchers = [];
+    }
+  
+    this.vouchersVisible = this.filteredVouchers.length > 0;
   }
-
-  //filter for status
+  
   filtrarPorEstado(estado: string): void {
     this.filtroEstados = estado;
   
     if (estado.trim() === '') {
       this.facturasNoEncontradasMensaje = `No se encontraron facturas del tipo "${this.filtroTipoFactura}".`;
-      this.filteredVouchers = this.filtrarVouchersPorTipoFactura();
+      this.filteredVouchers = [];
     } else {
-      this.filteredVouchers = this.filtrarVouchersPorTipoFactura().filter(voucher => voucher.status === estado.trim());
-      this.facturasNoEncontradasMensaje = '';  
+      this.filteredVouchers = this.allVouchers.filter(voucher => voucher.voucherType === 'FACTURA' && voucher.status === estado.trim());
+      this.facturasNoEncontradasMensaje = '';
     }
   
     if (this.filteredVouchers.length > 0) {
-      this.estadoNoEncontradoMensaje = ''; 
+      this.estadoNoEncontradoMensaje = '';
     } else {
       this.estadoNoEncontradoMensaje = `No existen notas de crédito con el estado "${estado}".`;
     }
   
-    this.actualizarListaFiltrada(); 
+    this.actualizarListaFiltrada();
   }
-  //Updating changes
+  
+
   actualizarListaFiltrada(): void {
     if (this.filtroEstados.trim() === '') {
       this.vouchersVisible = false;
-      this.filteredVouchers = []; 
+      this.filteredVouchers = [];
     } else {
       this.vouchersVisible = this.filteredVouchers.length > 0;
     }

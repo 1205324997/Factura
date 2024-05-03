@@ -39,7 +39,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { provideFirebaseApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
-import { FirestoreComponent } from './firestore/firestore.component';
+import { FirestoreComponent } from './firebase/firestore/firestore.component';
 if (environment.defaultauth === 'firebase') {
   initFirebaseBackend(environment.firebaseConfig),
   provideFirestore(() => getFirestore())

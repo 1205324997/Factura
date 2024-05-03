@@ -1,5 +1,6 @@
 <div class="container">
   <div>
+    <!-- filter for status-->
     <select id="tipoEstado" (change)="filtrarPorEstado($event.target.value)">
       <option value="" disabled selected hidden>- Selecionar factura por estado</option>
       <option *ngFor="let estado of estadosDisponibles" [value]="estado">{{ estado }}</option>
@@ -14,6 +15,7 @@
   <div *ngIf="estadoNoEncontradoMensaje !== ''">
     <p>{{ estadoNoEncontradoMensaje }}</p>
   </div>
+  <!--Data displayed from the invoces-->
   <div *ngIf="vouchersVisible" class="voucher-grid">
     <div class="voucher-card" *ngFor="let voucher of filteredVouchers">
       <div class="voucher-info">
@@ -26,11 +28,12 @@
         <p><strong>Subtotal:</strong> {{ voucher.subtotal }}</p>     
         <p><strong>IVA:</strong> {{ voucher.subtotalNotSubjectIVA }}</p>  
         <p><strong>Total:</strong> {{ voucher.total}}</p>  
+
         <button class="btn btn-primary" (click)="descargarPDF(voucher)">PDF</button>
       </div>
     </div>
   </div>
-  <div *ngIf="facturasNoEncontradasMensaje !== ''">
+  <div *ngIf="!vouchersVisible && facturasNoEncontradasMensaje !== ''">
     <p>{{ facturasNoEncontradasMensaje }}</p>
   </div>
 </div>

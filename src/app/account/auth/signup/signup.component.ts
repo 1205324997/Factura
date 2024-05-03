@@ -3,8 +3,6 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthenticationService } from '../../../core/services/auth.service';
-import { environment } from '../../../../environments/environment';
-import { first } from 'rxjs/operators';
 import { UserProfileService } from '../../../core/services/user.service';
 import { Store } from '@ngrx/store';
 import { Register } from 'src/app/store/Authentication/authentication.actions';
@@ -59,6 +57,7 @@ export class SignupComponent implements OnInit {
 
     this.firestoreService.addUser({ email, username: name, password, ruc })
       .then(() => {
+        localStorage.setItem('userEmail', email);
         this.successmsg = true;
       })
       .catch(error => {

@@ -5,7 +5,7 @@ import { AuthenticationService } from '../../../core/services/auth.service';
 
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
-import { login } from 'src/app/store/Authentication/authentication.actions';
+
 
 @Component({
   selector: 'app-login',
@@ -60,6 +60,7 @@ export class LoginComponent implements OnInit {
       user => {
         // Si la autenticación es exitosa, redirigir al usuario a la página principal
         this.router.navigate(['/']);
+        console.log(email)
       },
       error => {
         // Si hay un error durante la autenticación, mostrar el mensaje de error

@@ -10,23 +10,6 @@ export const MENU: MenuItem[] = [
         id: 2,
         label: 'MENUITEMS.DASHBOARDS.TEXT',
         icon: 'bx-home-circle',
-        subItems: [
-            {
-                id: 3,
-                label: 'MENUITEMS.DASHBOARDS.LIST.DEFAULT',
-                link: '/',
-                parentId: 2
-            },
-        ]
-    },
-    {
-        id: 4,
-        isLayout: true
-    },
-    {
-        id: 5,
-        label: 'MENUITEMS.APPS.TEXT',
-        isTitle: true
     },
     {
         id: 6,
