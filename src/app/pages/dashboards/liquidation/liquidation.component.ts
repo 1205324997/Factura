@@ -12,83 +12,88 @@ export class LiquidationComponent {
   vouchers: any[] = [];
   filteredVouchers: any[] = [];
   vouchersVisible: boolean = false;
-  filtroTipoFactura: string = 'Facturas'; 
-
+  filtroTipoFactura: string = 'Liquidación de compra';
+  filtroEstados: string = '';
+  estadoNoEncontradoMensaje: string = '';
+  facturasNoEncontradasMensaje: string = ''; 
+  estadosDisponibles: string[] = ['']; 
+  
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
     console.log("Invoice component initialized.");
     this.obtenerVouchers();
+    this.facturasNoEncontradasMensaje = `No se encontraron facturas del tipo "${this.filtroTipoFactura}".`;
   }
 
   obtenerVouchers(): void {
     const params = new HttpParams()
       .set('pageSize', '100')
       .set('startIndex', '0')
-      .set('tipoFactura', this.filtroTipoFactura); 
+      .set('tipoFactura', this.filtroTipoFactura);
 
     this.apiService.getVouchers(params).subscribe(
       (response: any[]) => {
         this.vouchers = response;
-        this.filtrarVouchersPorTipoFactura(); 
-        console.log("Invoice obtained:", this.vouchers);
+        console.log("Datos de vouchers recuperados:", this.vouchers);
+        this.filtrarVouchersPorTipoFactura();
       },
       (error) => {
         console.error('Error obtaining invoice:', error);
       }
     );
   }
-
-  filtrarVouchers(tipoFactura: string): void {
-    console.log("Type of invoice select:", tipoFactura);
-    this.filtroTipoFactura = tipoFactura;
-    this.filtrarVouchersPorTipoFactura();
-  }
-  //Download PDF
-  
-  descargarPDF(voucher: any): void {
-    const doc = new jsPDF();
-    const voucherTexto = `
-      Tipo de Factura: ${voucher.voucherType}
-      Nombre: ${voucher.businessName}
-      RUC: ${voucher.ruc}
-      Estado: ${voucher.status}
-      Estado SRI: ${voucher.statusSri}
-      Fecha de factura: ${voucher.broadcastDate}
-      Subtotal: ${voucher.subtotal}
-      IVA: ${voucher.subtotalNotSubjectIVA}
-      Total: ${voucher.total}
-    `;
-    doc.text(voucherTexto, 10, 10);
-    doc.save(`voucher_${voucher.id}.pdf`);
-  }
-
-  //Filter type voucher 
-  filtrarVouchersPorTipoFactura(): void {  
+ //filter for type invoices
+  filtrarVouchersPorTipoFactura(): any[] {
     const tipoFacturaBuscado = 'LIQUIDACION_COMPRA';
-  
-    if (tipoFacturaBuscado) {
-      this.filteredVouchers = this.vouchers.filter(voucher => voucher.voucherType === tipoFacturaBuscado);
-    } else {
-      this.filteredVouchers = [];
-    }
-    
-    this.vouchersVisible = this.filteredVouchers.length > 0;
+    return this.vouchers.filter(voucher => voucher.voucherType === tipoFacturaBuscado);
   }
   
-  filtrarPorRuc(ruc: string): void {
-    if (ruc.trim() === '') {
-      this.filteredVouchers = this.vouchers;
+  //filter for status
+  filtrarPorEstado(estado: string): void {
+    this.filtroEstados = estado;
+  
+    if (estado.trim() === '') {
+      this.facturasNoEncontradasMensaje = `No se encontraron facturas del tipo "${this.filtroTipoFactura}".`;
+      this.filteredVouchers = this.filtrarVouchersPorTipoFactura();
     } else {
-      this.filteredVouchers = this.vouchers.filter(voucher => voucher.ruc.includes(ruc.trim()));
+      this.filteredVouchers = this.filtrarVouchersPorTipoFactura().filter(voucher => voucher.status === estado.trim());
+      this.facturasNoEncontradasMensaje = '';  
+    }
+  
+    if (this.filteredVouchers.length > 0) {
+      this.estadoNoEncontradoMensaje = ''; 
+    } else {
+      this.estadoNoEncontradoMensaje = `No existen notas de crédito con el estado "${estado}".`;
+    }
+  
+    this.actualizarListaFiltrada(); 
+  }
+  //Updating changes
+  actualizarListaFiltrada(): void {
+    if (this.filtroEstados.trim() === '') {
+      this.vouchersVisible = false;
+      this.filteredVouchers = []; 
+    } else {
+      this.vouchersVisible = this.filteredVouchers.length > 0;
     }
   }
-    
-  mostrarTodasLasFacturas(): void {
-    this.filteredVouchers = this.vouchers; 
-    this.vouchersVisible = true; 
-  }
+
+    //Download PDF
+    descargarPDF(voucher: any): void {
+      const doc = new jsPDF();
+      const voucherTexto = `
+        Tipo de Factura: ${voucher.voucherType}
+        Nombre: ${voucher.businessName}
+        RUC: ${voucher.ruc}
+        Estado: ${voucher.status}
+        Estado SRI: ${voucher.statusSri}
+        Fecha de factura: ${voucher.broadcastDate}
+        Subtotal: ${voucher.subtotal}
+        IVA: ${voucher.subtotalNotSubjectIVA}
+        Total: ${voucher.total}
+      `;
+      doc.text(voucherTexto, 10, 10);
+      doc.save(`voucher_${voucher.id}.pdf`);
+    }
 }
-
-
-

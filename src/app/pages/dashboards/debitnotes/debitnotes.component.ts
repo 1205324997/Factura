@@ -12,7 +12,12 @@ export class DebitnotesComponent {
   vouchers: any[] = [];
   filteredVouchers: any[] = [];
   vouchersVisible: boolean = false;
-  filtroTipoFactura: string = 'Facturas'; 
+  filtroEstados: string = '';
+  estadoNoEncontradoMensaje: string = '';
+  filtroTipoFactura: string = 'Factura'; 
+  estadosDisponibles: string[] = ['']; 
+  facturasNoEncontradasMensaje: string = ''; 
+
 
   constructor(private apiService: ApiService) { }
 
@@ -43,9 +48,10 @@ export class DebitnotesComponent {
     console.log("Type of invoice select:", tipoFactura);
     this.filtroTipoFactura = tipoFactura;
     this.filtrarVouchersPorTipoFactura();
+    this.filtrarPorEstado(this.filtroEstados);
   }
+
   //Download PDF
-  
   descargarPDF(voucher: any): void {
     const doc = new jsPDF();
     const voucherTexto = `
@@ -63,35 +69,41 @@ export class DebitnotesComponent {
     doc.save(`voucher_${voucher.id}.pdf`);
   }
 
-  //Filter type voucher 
-  filtrarVouchersPorTipoFactura(): void {
-  
+  //Filter for type invoices
+  filtrarVouchersPorTipoFactura(): any[] {
     const tipoFacturaBuscado = 'NOTA_DEBITO';
+    return this.vouchers.filter(voucher => voucher.voucherType === tipoFacturaBuscado);
+  }
+
+  //filter for status
+  filtrarPorEstado(estado: string): void {
+    this.filtroEstados = estado;
   
-    if (tipoFacturaBuscado) {
-      this.filteredVouchers = this.vouchers.filter(voucher => voucher.voucherType === tipoFacturaBuscado);
+    if (estado.trim() === '') {
+      this.facturasNoEncontradasMensaje = `No se encontraron facturas del tipo "${this.filtroTipoFactura}".`;
+      this.filteredVouchers = this.filtrarVouchersPorTipoFactura();
     } else {
-      this.filteredVouchers = [];
+      this.filteredVouchers = this.filtrarVouchersPorTipoFactura().filter(voucher => voucher.status === estado.trim());
+      this.facturasNoEncontradasMensaje = '';  
     }
-    
-    this.vouchersVisible = this.filteredVouchers.length > 0;
-  }
   
-  filtrarPorRuc(ruc: string): void {
-    if (ruc.trim() === '') {
-      this.filteredVouchers = this.vouchers;
+    if (this.filteredVouchers.length > 0) {
+      this.estadoNoEncontradoMensaje = ''; 
     } else {
-      this.filteredVouchers = this.vouchers.filter(voucher => voucher.ruc.includes(ruc.trim()));
+      this.estadoNoEncontradoMensaje = `No existen notas de crédito con el estado "${estado}".`;
+    }
+  
+    this.actualizarListaFiltrada(); 
+  }
+  //Updating changes
+  actualizarListaFiltrada(): void {
+    if (this.filtroEstados.trim() === '') {
+      this.vouchersVisible = false;
+      this.filteredVouchers = []; 
+    } else {
+      this.vouchersVisible = this.filteredVouchers.length > 0;
     }
   }
-    
-  mostrarTodasLasFacturas(): void {
-    this.filteredVouchers = this.vouchers; 
-    this.vouchersVisible = true; 
-  }
+
+  
 }
-
-
-
-
-

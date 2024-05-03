@@ -1,6 +1,7 @@
 // api.service.ts
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,7 +10,7 @@ import { Observable } from 'rxjs';
 export class ApiService {
   private filtroTipoFactura: string;
 
-  constructor(public http: HttpClient) { }
+  constructor(public http: HttpClient, private router: Router) { }
 
   public setFiltroTipoFactura(tipoFactura: string): void {
     this.filtroTipoFactura = tipoFactura;
@@ -21,5 +22,9 @@ export class ApiService {
       params = params.set('tipoFactura', this.filtroTipoFactura);
     }
     return this.http.get<any>(url, { params });
+  }
+
+  redirectToUrl(url: string): void {
+    this.router.navigateByUrl(url);
   }
 }

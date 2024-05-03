@@ -1,6 +1,19 @@
 <div class="container">
-  <div class="flex-container">
     <div>
+      <select id="tipoEstado" (change)="filtrarPorEstado($event.target.value)">
+        <option value="" disabled selected hidden>- Selecionar estado</option>
+        <option *ngFor="let estado of estadosDisponibles" [value]="estado">{{ estado }}</option>
+        <option value="PENDIENTE">Pendiente de pago</option>
+        <option value="AUTORIZADA">Autorizada para pago</option>
+        <option value="EN_REVISION">En revisión</option>
+        <option value="EN_PROCESO_DE_APROBACION">En proceso de aprobación</option>
+        <option value="ERROR_EN_LA_FACTURA">Error en la factura</option>
+        <option value="EN_ESPERA_DE_INFORMACION_ADICIONAL">En espera de información adicional</option>
+      </select>
+    </div>
+    <div *ngIf="estadoNoEncontradoMensaje !== ''">
+      <p>{{ estadoNoEncontradoMensaje }}</p>
+    </div>
      <!-- <button class="btn btn-primary" (click)="mostrarTodasLasFacturas()">Mostrar Todas las Facturas</button>
   
       <select id="tipoFactura" (change)="filtrarVouchers($event.target.value)">
@@ -44,8 +57,7 @@
     </div>
   </div>
 </div>
-
-
-<div *ngIf="!(vouchersVisible)">
-  <p>No se encontraron vouchers.</p>
+<div *ngIf="!vouchersVisible && facturasNoEncontradasMensaje !== ''">
+  <p>{{ facturasNoEncontradasMensaje }}</p>
+</div>
 </div>

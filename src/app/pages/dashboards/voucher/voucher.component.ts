@@ -12,7 +12,12 @@ export class VoucherComponent implements OnInit {
   vouchers: any[] = [];
   filteredVouchers: any[] = [];
   vouchersVisible: boolean = false;
-  filtroTipoFactura: string = 'Facturas'; 
+  filtroEstados: string = '';
+  estadoNoEncontradoMensaje: string = '';
+  filtroTipoFactura: string = 'Factura'; 
+  estadosDisponibles: string[] = ['']; 
+  facturasNoEncontradasMensaje: string = ''; 
+
 
   constructor(private apiService: ApiService) { }
 
@@ -43,9 +48,10 @@ export class VoucherComponent implements OnInit {
     console.log("Type of invoice select:", tipoFactura);
     this.filtroTipoFactura = tipoFactura;
     this.filtrarVouchersPorTipoFactura();
+    this.filtrarPorEstado(this.filtroEstados);
   }
+
   //Download PDF
-  
   descargarPDF(voucher: any): void {
     const doc = new jsPDF();
     const voucherTexto = `
@@ -63,9 +69,45 @@ export class VoucherComponent implements OnInit {
     doc.save(`voucher_${voucher.id}.pdf`);
   }
 
+  //Filter for type invoices
+  filtrarVouchersPorTipoFactura(): any[] {
+    const tipoFacturaBuscado = 'FACTURA';
+    return this.vouchers.filter(voucher => voucher.voucherType === tipoFacturaBuscado);
+  }
+
+  //filter for status
+  filtrarPorEstado(estado: string): void {
+    this.filtroEstados = estado;
+  
+    if (estado.trim() === '') {
+      this.facturasNoEncontradasMensaje = `No se encontraron facturas del tipo "${this.filtroTipoFactura}".`;
+      this.filteredVouchers = this.filtrarVouchersPorTipoFactura();
+    } else {
+      this.filteredVouchers = this.filtrarVouchersPorTipoFactura().filter(voucher => voucher.status === estado.trim());
+      this.facturasNoEncontradasMensaje = '';  
+    }
+  
+    if (this.filteredVouchers.length > 0) {
+      this.estadoNoEncontradoMensaje = ''; 
+    } else {
+      this.estadoNoEncontradoMensaje = `No existen notas de crédito con el estado "${estado}".`;
+    }
+  
+    this.actualizarListaFiltrada(); 
+  }
+  //Updating changes
+  actualizarListaFiltrada(): void {
+    if (this.filtroEstados.trim() === '') {
+      this.vouchersVisible = false;
+      this.filteredVouchers = []; 
+    } else {
+      this.vouchersVisible = this.filteredVouchers.length > 0;
+    }
+  }
+
   //Filter type voucher 
-  filtrarVouchersPorTipoFactura(): void {
-    {/*const tiposFactura = {
+  /* filtrarVouchersPorTipoFactura(): void {
+    const tiposFactura = {
       'Facturas': 'FACTURA',
       'Notas de crédito': 'NOTA_CREDITO',
       'Notas de débito': 'NOTA_DEBITO',
@@ -74,19 +116,10 @@ export class VoucherComponent implements OnInit {
       'Guías de remisión': 'GUIA_REMISION'
     };
   
-  const tipoFacturaBuscado = tiposFactura[this.filtroTipoFactura];*/}
-    const tipoFacturaBuscado ='FACTURA' ;
+  const tipoFacturaBuscado = tiposFactura[this.filtroTipoFactura];*/
   
-    if (tipoFacturaBuscado) {
-      this.filteredVouchers = this.vouchers.filter(voucher => voucher.voucherType === tipoFacturaBuscado);
-    } else {
-      this.filteredVouchers = [];
-    }
-    
-    this.vouchersVisible = this.filteredVouchers.length > 0;
-  }
   
-  filtrarPorRuc(ruc: string): void {
+  /*filtrarPorRuc(ruc: string): void {
     if (ruc.trim() === '') {
       this.filteredVouchers = this.vouchers;
     } else {
@@ -97,5 +130,7 @@ export class VoucherComponent implements OnInit {
   mostrarTodasLasFacturas(): void {
     this.filteredVouchers = this.vouchers; 
     this.vouchersVisible = true; 
-  }
+  }*/
+
+  
 }
