@@ -73,6 +73,7 @@ export class SignupComponent implements OnInit {
         this.firestoreService.addUser(user)
           .then(() => {
             console.log("Usuario agregado con éxito en Firestore");
+            localStorage.setItem('registeredUser', JSON.stringify(user));
             this.successmsg = true;
           })
           .catch(error => {
