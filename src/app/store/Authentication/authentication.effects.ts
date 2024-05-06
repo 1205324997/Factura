@@ -23,14 +23,7 @@ export class AuthenticationEffects {
             catchError((error) => of(RegisterFailure({ error })))
           );
         } else {
-          // Aquí se maneja el registro de usuario para un backend falso
-          // return this.userService.register({ email, username, password }).pipe(
-          //   map((user) => {
-          //     this.router.navigate(['/auth/login']);
-          //     return RegisterSuccess({ user });
-          //   }),
-          //   catchError((error) => of(RegisterFailure({ error })))
-          // );
+         
         }
       })
     )
@@ -43,26 +36,13 @@ export class AuthenticationEffects {
       ofType(login),
       exhaustMap(({ email, password }) => {
         if (environment.defaultauth === "firebase") {
-          // Aquí se maneja el login para un backend falso
-          // return this.AuthfakeService.login(email, password).pipe(
-          //   map((user) => {
-          //     if (user) {
-          //       localStorage.setItem('currentUser', JSON.stringify(user));
-          //       localStorage.setItem('token', user.token);
-          //       this.router.navigate(['/']);
-          //     }
-          //     return loginSuccess({ user });
-          //   }),
-          //   catchError((error) => of(loginFailure({ error })))
-          // );
+      
         } else if (environment.defaultauth === "firebase") {
           return this.AuthenticationService.login(email, password).pipe(
             map((userCredential) => {
               const user = userCredential.user;
               localStorage.setItem('currentUser', JSON.stringify(user));
-              // Aquí deberías usar el token de Firebase si lo necesitas
-              // const token = userCredential.accessToken;
-              // localStorage.setItem('token', token);
+             
               this.router.navigate(['/']);
               return loginSuccess({ user });
             }),

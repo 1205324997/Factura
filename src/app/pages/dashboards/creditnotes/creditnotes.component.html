@@ -1,43 +1,43 @@
 <div class="container">
-    <div>
-      <!-- filter for status-->
-      <select id="tipoEstado" (change)="filtrarPorEstado($event.target.value)">
-        <option value="" disabled selected hidden>- Selecionar factura por estado</option>
-        <option *ngFor="let estado of estadosDisponibles" [value]="estado">{{ estado }}</option>
-        <option value="PENDIENTE">Pendiente de pago</option>
-        <option value="AUTORIZADA">Autorizada para pago</option>
-        <option value="EN_REVISION">En revisión</option>
-        <option value="EN_PROCESO_DE_APROBACION">En proceso de aprobación</option>
-        <option value="ERROR_EN_LA_FACTURA">Error en la factura</option>
-        <option value="EN_ESPERA_DE_INFORMACION_ADICIONAL">En espera de información adicional</option>
-      </select>
-    </div>
-    <div *ngIf="estadoNoEncontradoMensaje !== ''">
-      <p>{{ estadoNoEncontradoMensaje }}</p>
-    </div>
-    <!--Data displayed from the invoces-->
-    <div *ngIf="vouchersVisible" class="voucher-grid">
-      <div class="voucher-card" *ngFor="let voucher of filteredVouchers">
-        <div class="voucher-info">
-          <p><strong>Tipo de Factura:</strong> {{ voucher.voucherType }}</p>
-          <p><strong>Nombre:</strong> {{ voucher.businessName }}</p>
-          <p><strong>RUC:</strong> {{ voucher.ruc }}</p>
-          <p><strong>Estado:</strong> {{ voucher.status }}</p>
-          <p><strong>Estado SRI:</strong> {{ voucher.statusSri }}</p>
-          <p><strong>Fecha de factura:</strong> {{ voucher.broadcastDate }}</p>
-          <p><strong>Subtotal:</strong> {{ voucher.subtotal }}</p>     
-          <p><strong>IVA:</strong> {{ voucher.subtotalNotSubjectIVA }}</p>  
-          <p><strong>Total:</strong> {{ voucher.total}}</p>  
-          
-           <!--Button of download-->
-          <button class="btn btn-primary" style="margin-right: auto; margin-left: 80;" (click)="descargarPDF(voucher)">PDF</button>
+  <div>
+    <!-- filter for status-->
+    <select id="tipoEstado" (change)="filtrarPorEstado($event.target.value)">
+      <option value="" disabled selected hidden>- Selecionar factura por estado</option>
+      <option *ngFor="let estado of estadosDisponibles" [value]="estado">{{ estado }}</option>
+      <option value="PENDIENTE">Pendiente de pago</option>
+      <option value="AUTORIZADA">Autorizada para pago</option>
+      <option value="EN_REVISION">En revisión</option>
+      <option value="EN_PROCESO_DE_APROBACION">En proceso de aprobación</option>
+      <option value="ERROR_EN_LA_FACTURA">Error en la factura</option>
+      <option value="EN_ESPERA_DE_INFORMACION_ADICIONAL">En espera de información adicional</option>
+    </select>
+  </div>
+  <div *ngIf="estadoNoEncontradoMensaje !== ''">
+    <p>{{ estadoNoEncontradoMensaje }}</p>
+  </div>
+  <!--Data displayed from the invoces-->
+  <div *ngIf="vouchersVisible" class="voucher-grid">
+    <div class="voucher-card" *ngFor="let voucher of filteredVouchers">
+      <div class="voucher-info">
+        <p><strong>Tipo de Factura:</strong> {{ voucher.voucherType }}</p>
+        <p><strong>Nombre:</strong> {{ voucher.businessName }}</p>
+        <p><strong>RUC:</strong> {{ voucher.ruc }}</p>
+        <p><strong>Estado:</strong> {{ voucher.status }}</p>
+        <p><strong>Estado SRI:</strong> {{ voucher.statusSri }}</p>
+        <p><strong>Fecha de factura:</strong> {{ voucher.broadcastDate }}</p>
+        <p><strong>Subtotal:</strong> {{ voucher.subtotal }}</p>     
+        <p><strong>IVA:</strong> {{ voucher.subtotalNotSubjectIVA }}</p>  
+        <p><strong>Total:</strong> {{ voucher.total}}</p>  
 
-          <button (click)="enviarCorreo()">Enviar por correo</button>
-
-        </div>
+        <button class="btn btn-pdf" (click)="descargarPDF(voucher)">
+          <span class="bi bi-file-earmark-pdf icon-pdf" style="color: #2a3042; font-size: 27px;"></span> 
+        </button>
+        
+        
       </div>
     </div>
-    <div *ngIf="!vouchersVisible && facturasNoEncontradasMensaje !== ''">
-      <p>{{ facturasNoEncontradasMensaje }}</p>
-    </div>
   </div>
+  <div *ngIf="!vouchersVisible && facturasNoEncontradasMensaje !== ''">
+    <p>{{ facturasNoEncontradasMensaje }}</p>
+  </div>
+</div>

@@ -52,8 +52,12 @@
       <p><strong>IVA:</strong> {{ voucher.subtotalNotSubjectIVA }}</p>  
       <p><strong>Total:</strong> {{ voucher.total}}</p>  
 
-      <button class="btn btn-primary" (click)="descargarPDF(voucher)">PDF</button>
-
+      <button class="btn btn-pdf" (click)="descargarPDF(voucher)">
+        <span class="bi bi-file-earmark-pdf icon-pdf" style="color: #2a3042; font-size: 27px;"></span> 
+      </button>
+      
+      
+      
     </div>
   </div>
 </div>

@@ -51,19 +51,18 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
 
-    // Obtener los valores ingresados por el usuario
     const email = this.f.email.value;
     const password = this.f.password.value;
 
-    // Iniciar sesión con los valores ingresados
+
     this.authenticationService.login(email, password).subscribe(
       user => {
-        // Si la autenticación es exitosa, redirigir al usuario a la página principal
+       
         this.router.navigate(['/']);
         console.log(email)
       },
       error => {
-        // Si hay un error durante la autenticación, mostrar el mensaje de error
+      
         this.error = error.message || 'Error de autenticación';
       }
     );
