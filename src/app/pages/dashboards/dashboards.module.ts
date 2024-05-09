@@ -21,7 +21,8 @@ import {MatTableModule} from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { DefaultComponent } from './default/default.component';
 import { VoucherComponent } from 'src/app/pages/dashboards/voucher/voucher.component';
@@ -35,6 +36,8 @@ import { VoucherComponent } from 'src/app/pages/dashboards/voucher/voucher.compo
     MatFormFieldModule,
     MatInputModule,
     MatPaginatorModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
     FormsModule,
     ReactiveFormsModule,
     DashboardsRoutingModule,

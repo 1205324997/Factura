@@ -1,31 +1,3 @@
-.container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.mat-elevation-z8 {
-  width: 100%;
-  overflow-x: auto; /* Habilita el desplazamiento horizontal */
-}
-
-.mat-form-field {
-  margin-bottom: 10px; /* Ajusta el espacio entre el campo de filtro y la tabla */
-}
-
-.mat-table {
-  width: 100%; /* o un ancho específico, por ejemplo: 1200px; */
-  overflow-x: auto;
-}
-
-.mat-header-cell,
-.mat-cell {
-  white-space: nowrap; /* Evita que el texto se rompa y se expanda la columna */
-  overflow: hidden; /* Oculta el desbordamiento de texto */
-  text-overflow: ellipsis; /* Agrega puntos suspensivos (...) para indicar texto truncado */
-}
-
-/* Por ejemplo, para la columna 'voucherType' */
-.mat-column-voucherType {
-  width: 100px; /* Ancho fijo */
+.mat-elevation-z8{
+  width: 60%;
 }

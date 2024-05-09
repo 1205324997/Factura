@@ -14,6 +14,7 @@ export class VoucherComponent implements OnInit {
   vouchers: any[] = [];
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = ['voucherType', 'businessName', 'ruc', 'status', 'statusSri', 'broadcastDate', 'subtotal', 'subtotalNotSubjectIVA', 'total', 'acciones'];
+  filteredVouchers: any[] = []; // Define filteredVouchers como un array vacío
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -29,11 +30,12 @@ export class VoucherComponent implements OnInit {
     const params = new HttpParams()
       .set('pageSize', '100')
       .set('startIndex', '0')
-      .set('tipoFactura', 'Facturas'); // Por defecto, obtén las facturas
+      .set('tipoFactura', 'Facturas');
 
     this.apiService.getVouchers(params).subscribe(
       (response: any[]) => {
         this.vouchers = response;
+        this.filteredVouchers = response; // Inicializa filteredVouchers con los vouchers obtenidos
         this.dataSource = new MatTableDataSource<any>(this.vouchers);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -48,6 +50,27 @@ export class VoucherComponent implements OnInit {
   aplicarFiltro(event: Event): void {
     const filtro = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filtro.trim().toLowerCase();
+  }
+
+  filtrarPorFechas(): void {
+    const fechaDesde = (document.getElementById('fechaDesde') as HTMLInputElement).value;
+    const fechaHasta = (document.getElementById('fechaHasta') as HTMLInputElement).value;
+  
+    if (fechaDesde && fechaHasta) {
+      this.filteredVouchers = this.vouchers.filter(voucher => {
+        const fechaVoucher = new Date(voucher.broadcastDate);
+        const fechaDesdeObj = new Date(fechaDesde);
+        const fechaHastaObj = new Date(fechaHasta);
+  
+        return fechaVoucher >= fechaDesdeObj && fechaVoucher <= fechaHastaObj;
+      });
+    } else {
+      this.filteredVouchers = this.vouchers;
+    }
+
+    this.dataSource = new MatTableDataSource<any>(this.filteredVouchers);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   descargarPDF(voucher: any): void {
