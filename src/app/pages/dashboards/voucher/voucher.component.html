@@ -1,83 +1,26 @@
+<div class="container">
 <div>
-  <button (click)="mostrarTodasLasFacturas()">Mostrar Todas las Facturas</button>
+  <mat-form-field>
+    <mat-label>Filtrar</mat-label>
+    <input matInput (keyup)="aplicarFiltro($event)" placeholder="Filtrar...">
+  </mat-form-field>
 </div>
 
-<div>
-  <label for="buscarRuc">Buscar por RUC:</label>
-  <input type="text" id="buscarRuc" (input)="filtrarPorRuc($event.target.value)">
-</div>
-<div>
-  <label for="tipoEstado">Seleccione estado de factura:</label>
-  <select id="tipoEstado" (change)="filtrarPorEstado($event.target.value)">
-    <option value="" disabled selected hidden>- Selecionar factura por estado</option>
-    <option *ngFor="let estado of estadosDisponibles" [value]="estado">{{ estado }}</option>
-    <option value="PENDIENTE">Pendiente de pago</option>
-    <option value="AUTORIZADA">Autorizada para pago</option>
-    <option value="EN_REVISION">En revisión</option>
-    <option value="EN_PROCESO_DE_APROBACION">En proceso de aprobación</option>
-    <option value="ERROR_EN_LA_FACTURA">Error en la factura</option>
-    <option value="EN_ESPERA_DE_INFORMACION_ADICIONAL">En espera de información adicional</option>
-  </select>
-</div>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort>
 
-<div>
-  <label for="fechaDesde">Desde:</label>
-  <input type="date" id="fechaDesde" (change)="filtrarPorFechas()">
-</div>
-<div>
-  <label for="fechaHasta">Hasta:</label>
-  <input type="date" id="fechaHasta" (change)="filtrarPorFechas()">
-</div>
+    <!-- Columnas de la tabla -->
+    <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ column }} </th>
+      <td mat-cell *matCellDef="let voucher"> {{ voucher[column] }} </td>
+    </ng-container>
 
-<div>
-  <label for="tipoFactura">Seleccione tipo de factura:</label>
-  <select id="tipoFactura" (change)="filtrarVouchers($event.target.value)">
-    <option value="Facturas">Facturas</option>
-    <option value="Notas de crédito">Notas de crédito</option>
-    <option value="Notas de débito">Notas de débito</option>
-    <option value="Liquidaciones de compras de bienes y prestación de servicios">Liquidaciones de compras</option>
-    <option value="Comprobantes de retención">Comprobantes de retención</option>
-    <option value="Guías de remisión">Guías de remisión</option>
-  </select>
-</div>
-
-<div *ngIf="vouchersVisible">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Tipo de Factura</th>
-        <th>Nombre</th>
-        <th>RUC</th>
-        <th>Estado</th>
-        <th>Estado SRI</th>
-        <th>Fecha de factura</th>
-        <th>Subtotal</th>
-        <th>IVA</th>
-        <th>Total</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let voucher of filteredVouchers">
-          <td>{{ capitalizePipe.transform(voucher.voucherType.replace('_', ' ')) }}</td>
-          <td>{{ capitalizePipe.transform(voucher.businessName) }}</td>
-          <td>{{ voucher.ruc }}</td>
-          <td>{{ capitalizePipe.transform(voucher.status) }}</td>
-          <td>{{ capitalizePipe.transform(voucher.statusSri) }}</td>
-          <td>{{ voucher.broadcastDate }}</td>
-          <td>{{ voucher.subtotal }}</td>
-          <td>{{ voucher.subtotalNotSubjectIVA }}</td>
-          <td>{{ voucher.total }}</td>
-        <td>
-          <button class="btn btn-pdf" (click)="descargarPDF(voucher)">
-            <span class="bi bi-file-earmark-pdf icon-pdf" style="color: #2a3042; font-size: 15px;">PDF</span> 
-          </button>
-        </td>
-      </tr>
-    </tbody>
+    <!-- Filas de la tabla -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-</div>
 
-<div *ngIf="!(vouchersVisible)">
-  <p>No se encontraron vouchers.</p>
+  <!-- Paginador -->
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Seleccionar página de vouchers"></mat-paginator>
+</div>
 </div>

@@ -16,6 +16,13 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { SimplebarAngularModule } from 'simplebar-angular';
 
+//Table
+import {MatTableModule} from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
+
 import { DefaultComponent } from './default/default.component';
 import { VoucherComponent } from 'src/app/pages/dashboards/voucher/voucher.component';
 
@@ -24,6 +31,10 @@ import { VoucherComponent } from 'src/app/pages/dashboards/voucher/voucher.compo
   declarations: [DefaultComponent, VoucherComponent], 
   imports: [
     CommonModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatPaginatorModule,
     FormsModule,
     ReactiveFormsModule,
     DashboardsRoutingModule,
