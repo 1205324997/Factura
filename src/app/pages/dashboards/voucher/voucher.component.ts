@@ -2,9 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from 'src/app/core/services/voucherapi.service';
 import { HttpParams } from '@angular/common/http';
 import jsPDF from 'jspdf';
+import * as xml2js from 'xml2js';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { EmailService } from 'src/app/core/services/email.service';
 
 
 @Component({
@@ -14,7 +16,7 @@ import { MatTableDataSource } from '@angular/material/table';
 export class VoucherComponent implements OnInit {
   vouchers: any[] = [];
   dataSource: MatTableDataSource<any>;
-  displayedColumns: string[] = ['voucherTypeCode','voucherType', 'businessName', 'ruc', 'status', 'statusSri', 'broadcastDate', 'acciones'];
+  displayedColumns: string[] = ['voucherTypeCode','voucherType', 'businessName', 'ruc', 'status', 'statusSri', 'broadcastDate', 'acciones', 'sendEmail'];
   filteredVouchers: any[] = []; 
 
   columnasTraducidas = {
@@ -25,14 +27,15 @@ export class VoucherComponent implements OnInit {
     'status': 'Estado',
     'statusSri': 'Estado SRI',
     'broadcastDate': 'Fecha de Emisión',
-    'acciones': 'Acciones'
+    'acciones': 'Acciones',
+    'sendEmail': 'Enviar correo'
   };
 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private emailService: EmailService ) {}
 
   ngOnInit(): void {
     console.log("Componente Voucher inicializado.");
@@ -107,10 +110,52 @@ export class VoucherComponent implements OnInit {
       }
     }
 
-    // Descargar el PDF con el texto generado
     doc.text(voucherTexto, 10, 10);
     doc.save(`voucher_${voucher.id}.pdf`);
   }
+
+  descargarXML(voucher: any): void {
+    let xmlString = '<?xml version="1.0" encoding="UTF-8"?>\n<voucher>\n';
+
+    // Generar el XML del voucher basado en los datos del voucher
+    for (const key in voucher) {
+      if (voucher.hasOwnProperty(key) && this.displayedColumns.includes(key)) {
+        xmlString += `\t<${key}>${voucher[key]}</${key}>\n`;
+      }
+    }
+
+    xmlString += '</voucher>';
+
+    // Descargar el XML generado
+    const blob = new Blob([xmlString], { type: 'text/xml' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `voucher_${voucher.id}.xml`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  }
+
+  enviarCorreo(voucher: any): void {
+    console.log('Intentando enviar correo para voucher:', voucher);
+
+    // Construir el cuerpo del correo
+    const destinatario = 'correo@example.com';
+    const asunto = `Voucher ${voucher.id}`;
+    const cuerpo = `Adjunto encontrarás el voucher ${voucher.id}`;
+    // Se puede ajustar el destinatario, el asunto y el cuerpo del correo según tus necesidades
+
+    // Llamar al servicio para enviar el correo con el archivo adjunto
+    this.emailService.enviarCorreo(destinatario, asunto, cuerpo, [`voucher_${voucher.id}.pdf`, `voucher_${voucher.id}.xml`])
+      .then(response => {
+        console.log('Correo enviado correctamente:', response);
+      })
+      .catch(error => {
+        console.error('Error al enviar el correo:', error);
+      });
+}
 
 
   // Función para capitalizar las palabras

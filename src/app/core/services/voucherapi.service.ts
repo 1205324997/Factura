@@ -1,4 +1,3 @@
-// api.service.ts
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -8,6 +7,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
+  protected static base_url = 'http://3.93.5.254:8030/';
+  protected static version = 'sri/v1';
   private filtroTipoFactura: string;
 
   constructor(public http: HttpClient, private router: Router) { }
@@ -17,7 +18,7 @@ export class ApiService {
   }
 
   public getVouchers(params: HttpParams): Observable<any> {
-    const url = 'http://3.93.5.254:8030/sri/v1/vouchers';
+    const url = `${ApiService.base_url}${ApiService.version}/vouchers`;
     if (this.filtroTipoFactura) {
       params = params.set('tipoFactura', this.filtroTipoFactura);
     }

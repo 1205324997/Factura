@@ -37,6 +37,12 @@
               <button  mat-icon-button color="primary" aria-label="Example picture_as_pdf icon" (click)="descargarPDF(voucher)">
                 <mat-icon style="color: #1c2130;">picture_as_pdf</mat-icon>
               </button>
+              <button  mat-icon-button color="primary" aria-label="Example description icon" (click)="descargarXML(voucher)">
+                <mat-icon style="color: #1c2130;">description</mat-icon>
+              </button>
+            </ng-container>
+            <ng-container *ngIf="column === 'sendEmail'">
+              <button mat-raised-button (click)="enviarCorreo(voucher)">enviar Email</button>
             </ng-container>
             <ng-container *ngIf="column !== 'acciones'">
               {{ capitalize(voucher[column]) }}
