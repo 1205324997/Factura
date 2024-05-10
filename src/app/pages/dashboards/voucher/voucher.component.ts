@@ -6,6 +6,18 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
+
+const columnNames: { [key: string]: string } = {
+  'voucherTypeCode': 'N. Codigo',
+  'voucherType': 'Comprobante',
+  'businessName': 'Nombre',
+  'ruc': 'RUC',
+  'status': 'Estado',
+  'statusSri': 'Estado SRI',
+  'broadcastDate': 'Fecha de Emisión',
+  'acciones': 'Acciones'
+};
+
 @Component({
   selector: 'app-voucher',
   templateUrl: './voucher.component.html',
@@ -13,8 +25,10 @@ import { MatTableDataSource } from '@angular/material/table';
 export class VoucherComponent implements OnInit {
   vouchers: any[] = [];
   dataSource: MatTableDataSource<any>;
-  displayedColumns: string[] = ['voucherType', 'businessName', 'ruc', 'status', 'statusSri', 'broadcastDate', 'subtotal', 'subtotalNotSubjectIVA', 'total', 'acciones'];
-  filteredVouchers: any[] = []; // Define filteredVouchers como un array vacío
+  filteredVouchers: any[] = []; 
+ 
+  displayedColumns: string[] = ['voucherTypeCode','voucherType', 'businessName', 'ruc', 'status', 'statusSri', 'broadcastDate', 'acciones']
+  .map(column => columnNames[column] || column);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -35,7 +49,7 @@ export class VoucherComponent implements OnInit {
     this.apiService.getVouchers(params).subscribe(
       (response: any[]) => {
         this.vouchers = response;
-        this.filteredVouchers = response; // Inicializa filteredVouchers con los vouchers obtenidos
+        this.filteredVouchers = response; 
         this.dataSource = new MatTableDataSource<any>(this.vouchers);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -48,9 +62,19 @@ export class VoucherComponent implements OnInit {
   }
 
   aplicarFiltro(event: Event): void {
-    const filtro = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filtro.trim().toLowerCase();
+    const filtro = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = filtro;
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      const dataStr = Object.keys(data).reduce((concatenated, key) => {
+        if (key === 'voucherTypeCode') {
+          return concatenated + data[key];
+        }
+        return concatenated + (data[key] ? data[key].toString().toLowerCase() : '');
+      }, '');
+      return dataStr.indexOf(filter) !== -1;
+    };
   }
+  
 
   filtrarPorFechas(): void {
     const fechaDesde = (document.getElementById('fechaDesde') as HTMLInputElement).value;
@@ -88,5 +112,11 @@ export class VoucherComponent implements OnInit {
     `;
     doc.text(voucherTexto, 10, 10);
     doc.save(`voucher_${voucher.id}.pdf`);
+  }
+
+  // Función para capitalizar las palabras
+  capitalize(value: string): string {
+    if (!value) return value;
+    return value.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
   }
 }

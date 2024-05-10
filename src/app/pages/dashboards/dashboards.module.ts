@@ -24,6 +24,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
+//Icon
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+
 import { DefaultComponent } from './default/default.component';
 import { VoucherComponent } from 'src/app/pages/dashboards/voucher/voucher.component';
 
@@ -32,7 +36,9 @@ import { VoucherComponent } from 'src/app/pages/dashboards/voucher/voucher.compo
   declarations: [DefaultComponent, VoucherComponent], 
   imports: [
     CommonModule,
+    MatIconModule,
     MatTableModule,
+    MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
     MatPaginatorModule,
