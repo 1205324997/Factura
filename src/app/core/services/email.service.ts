@@ -10,14 +10,8 @@ export class EmailService {
 
   constructor(private http: HttpClient) { }
 
-  enviarCorreo(destinatario: string, asunto: string, cuerpo: string, adjuntos: string[]): Promise<any> {
+  enviarCorreo(datosCorreo: any): Promise<any> {
     const url = `${EmailService.base_url}${EmailService.version}/email/message`;
-    const correo = {
-      emails: [destinatario],
-      subject: asunto,
-      body: cuerpo,
-      attachments: adjuntos
-    };
-    return this.http.post(url, correo).toPromise();
+    return this.http.post(url, datosCorreo).toPromise();
   }
 }

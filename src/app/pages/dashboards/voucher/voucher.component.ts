@@ -139,23 +139,25 @@ export class VoucherComponent implements OnInit {
   }
 
   enviarCorreo(voucher: any): void {
-    console.log('Intentando enviar correo para voucher:', voucher);
-
-    // Construir el cuerpo del correo
-    const destinatario = 'correo@example.com';
+    const destinatario = 'destinatario@example.com';
     const asunto = `Voucher ${voucher.id}`;
     const cuerpo = `Adjunto encontrarás el voucher ${voucher.id}`;
-    // Se puede ajustar el destinatario, el asunto y el cuerpo del correo según tus necesidades
-
-    // Llamar al servicio para enviar el correo con el archivo adjunto
-    this.emailService.enviarCorreo(destinatario, asunto, cuerpo, [`voucher_${voucher.id}.pdf`, `voucher_${voucher.id}.xml`])
+    const adjuntos = [`voucher_${voucher.id}.pdf`, `voucher_${voucher.id}.xml`];
+    const datosCorreo = {
+      emails: [destinatario],
+      subject: asunto,
+      body: cuerpo,
+      attachments: adjuntos
+    };
+    this.emailService.enviarCorreo(datosCorreo)
       .then(response => {
         console.log('Correo enviado correctamente:', response);
       })
       .catch(error => {
         console.error('Error al enviar el correo:', error);
       });
-}
+  }
+  
 
 
   // Función para capitalizar las palabras

@@ -1,8 +1,0 @@
-{
-    "/notifications/v1": {
-      "target": "http://notificaciones.backcobasoft.net/",
-      "secure": false,
-      "logLevel": "debug"
-    }
-  }
-  
