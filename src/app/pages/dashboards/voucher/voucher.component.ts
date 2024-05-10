@@ -7,17 +7,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 
-const columnNames: { [key: string]: string } = {
-  'voucherTypeCode': 'N. Codigo',
-  'voucherType': 'Comprobante',
-  'businessName': 'Nombre',
-  'ruc': 'RUC',
-  'status': 'Estado',
-  'statusSri': 'Estado SRI',
-  'broadcastDate': 'Fecha de Emisión',
-  'acciones': 'Acciones'
-};
-
 @Component({
   selector: 'app-voucher',
   templateUrl: './voucher.component.html',
@@ -25,10 +14,8 @@ const columnNames: { [key: string]: string } = {
 export class VoucherComponent implements OnInit {
   vouchers: any[] = [];
   dataSource: MatTableDataSource<any>;
+  displayedColumns: string[] = ['voucherTypeCode','voucherType', 'businessName', 'ruc', 'status', 'statusSri', 'broadcastDate', 'acciones'];
   filteredVouchers: any[] = []; 
- 
-  displayedColumns: string[] = ['voucherTypeCode','voucherType', 'businessName', 'ruc', 'status', 'statusSri', 'broadcastDate', 'acciones']
-  .map(column => columnNames[column] || column);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
