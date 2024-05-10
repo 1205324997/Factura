@@ -17,6 +17,18 @@ export class VoucherComponent implements OnInit {
   displayedColumns: string[] = ['voucherTypeCode','voucherType', 'businessName', 'ruc', 'status', 'statusSri', 'broadcastDate', 'acciones'];
   filteredVouchers: any[] = []; 
 
+  columnasTraducidas = {
+    'voucherTypeCode': 'Código',
+    'voucherType': 'Comprobante',
+    'businessName': 'Nombre',
+    'ruc': 'RUC',
+    'status': 'Estado',
+    'statusSri': 'Estado SRI',
+    'broadcastDate': 'Fecha de Emisión',
+    'acciones': 'Acciones'
+  };
+
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -51,14 +63,14 @@ export class VoucherComponent implements OnInit {
   aplicarFiltro(event: Event): void {
     const filtro = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.dataSource.filter = filtro;
-    this.dataSource.filterPredicate = (data: any, filter: string) => {
+    this.dataSource.filterPredicate = (data: any) => {
       const dataStr = Object.keys(data).reduce((concatenated, key) => {
         if (key === 'voucherTypeCode') {
           return concatenated + data[key];
         }
         return concatenated + (data[key] ? data[key].toString().toLowerCase() : '');
       }, '');
-      return dataStr.indexOf(filter) !== -1;
+      return dataStr.includes(filtro);
     };
   }
   
@@ -86,20 +98,20 @@ export class VoucherComponent implements OnInit {
 
   descargarPDF(voucher: any): void {
     const doc = new jsPDF();
-    const voucherTexto = `
-      Tipo de Factura: ${voucher.voucherType}
-      Nombre: ${voucher.businessName}
-      RUC: ${voucher.ruc}
-      Estado: ${voucher.status}
-      Estado SRI: ${voucher.statusSri}
-      Fecha de factura: ${voucher.broadcastDate}
-      Subtotal: ${voucher.subtotal}
-      IVA: ${voucher.subtotalNotSubjectIVA}
-      Total: ${voucher.total}
-    `;
+    let voucherTexto = '';
+
+    // Generar el texto del voucher basado en los datos del voucher
+    for (const key in voucher) {
+      if (voucher.hasOwnProperty(key) && this.displayedColumns.includes(key)) {
+        voucherTexto += `${this.columnasTraducidas[key]}: ${voucher[key]}\n`;
+      }
+    }
+
+    // Descargar el PDF con el texto generado
     doc.text(voucherTexto, 10, 10);
     doc.save(`voucher_${voucher.id}.pdf`);
   }
+
 
   // Función para capitalizar las palabras
   capitalize(value: string): string {
