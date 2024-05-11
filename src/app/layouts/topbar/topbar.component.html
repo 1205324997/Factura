@@ -3,15 +3,6 @@
     <div class="d-flex">
       <!-- LOGO -->
       <div class="navbar-brand-box">
-        <a routerLink="/" class="logo logo-dark">
-          <span class="logo-sm">
-            <img src="assets/images/logo.svg" alt="" height="22">
-          </span>
-          <span class="logo-lg">
-            <img src="assets/images/logo-dark.png" alt="" height="17">
-          </span>
-        </a>
-
         <a routerLink="/" class="logo logo-light">
           <span class="logo-sm">
             <img src="assets/images/logo-light.svg" alt="" height="22">
@@ -26,88 +17,25 @@
         <i class="fa fa-fw fa-bars"></i>
       </button>
 
-      <!-- App Search-->
- 
-
+      <!-- Dropdown Mega Menu -->
       <div class="dropdown-mega d-none d-lg-block ms-2" dropdown>
-     
         <div class="dropdown-menu dropdown-megamenu" *dropdownMenu>
           <div class="row">
             <div class="col-sm-8">
-
               <div class="row">
                 <div class="col-md-4">
-                  <h5 class="font-size-14 mt-0"> {{ 'HEADER.UI.TITLE' | translate}}</h5>
-                  <ul class="list-unstyled megamenu-list">
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.LIGHTBOX' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.RANGE_SLIDER' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.SWEET_ALERT' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.RATING' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.FORMS' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.TABLES' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.CHARTS' | translate}}</a>
-                    </li>
-                  </ul>
                 </div>
-
-
                 <div class="col-md-4">
-                  <h5 class="font-size-14 mt-0">{{ 'HEADER.EXTRA_PAGES.TITLE' | translate}}</h5>
-                  <ul class="list-unstyled megamenu-list">
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.EXTRA_PAGES.LIGHT_SIDEBAR' | translate}}</a>
-                    </li>
-                   
-
-                  </ul>
                 </div>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="row">
                 <div class="col-sm-6">
-                  <h5 class="font-size-14 mt-0"> {{ 'HEADER.UI.TITLE' | translate}}</h5>
-                  <ul class="list-unstyled megamenu-list">
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.LIGHTBOX' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.RANGE_SLIDER' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.SWEET_ALERT' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.RATING' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.FORMS' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.TABLES' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.CHARTS' | translate}}</a>
-                    </li>
-                  </ul>
+                  <h5 class="font-size-14 mt-0">{{ 'HEADER.UI.TITLE' | translate}}</h5>
                 </div>
-
                 <div class="col-sm-5">
                   <div>
-                    <img src="assets/images/megamenu-img.png" alt="" class="img-fluid mx-auto d-block">
                   </div>
                 </div>
               </div>
@@ -118,6 +46,7 @@
     </div>
 
     <div class="d-flex">
+      <!-- Search Button (for small screens) -->
       <div class="dropdown d-inline-block d-lg-none ms-2" dropdown>
         <button type="button" class="btn header-item noti-icon" id="page-header-search-dropdown" data-toggle="dropdown" aria-haspopup="true" dropdownToggle aria-expanded="false">
           <i class="mdi mdi-magnify"></i>
@@ -136,31 +65,14 @@
         </div>
       </div>
 
-      <!--<div class="dropdown d-inline-block" dropdown>
-        <button type="button" class="btn header-item" id="page-header-user-dropdown" dropdownToggle>
-          @if(flagvalue === undefined){
-          <img src="{{valueset}}" alt="Header Language" height="16">
-          }@else{
-          <img src="{{flagvalue}}" alt="Header Language" height="16">
-          }
-        </button>
-        <div class="dropdown-menu dropdown-menu-end" *dropdownMenu>
-           item-->
-          <!--@for (item of listLang; track $index) {
-          <a href="javascript:void(0);" class="dropdown-item notify-item" (click)="setLanguage(item.text, item.lang, item.flag)" [ngClass]="{'active': cookieValue === item.lang}">
-            <img src="{{item.flag}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">{{item.text}}</span>
-          </a>
-          }
-        </div>
-      </div>-->
-
-      
+      <!-- Fullscreen Button -->
       <div class="dropdown d-none d-lg-inline-block ms-1">
         <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen" (click)="fullscreen()">
           <i class="bx bx-fullscreen"></i>
         </button>
       </div>
 
+      <!-- Notifications Dropdown -->
       <div class="dropdown d-inline-block" dropdown>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown" *dropdownMenu>
           <div class="p-3">
@@ -169,28 +81,29 @@
               </div>
             </div>
           </div>
-      
         </div>
       </div>
 
+      <!-- User Dropdown -->
       <div class="dropdown d-inline-block" dropdown>
         <button type="button" class="btn header-item" dropdownToggle id="page-header-user-dropdown">
          <span class="d-none d-xl-inline-block ms-1">User </span>
           <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-end" *dropdownMenu>
-          <!-- item-->
-          <a class="dropdown-item text-danger" href="javascript: void(0);" (click)="logout()"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
-            {{ 'HEADER.LOGIN.LOGOUT' | translate}}</a>
+          <a class="dropdown-item text-danger" href="javascript:void(0);" (click)="logout()">
+            <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
+            {{ 'HEADER.LOGIN.LOGOUT' | translate}}
+          </a>
         </div>
       </div>
 
+      <!-- Right Sidebar Toggle Button -->
       <div class="dropdown d-inline-block">
         <button type="button" class="btn header-item noti-icon right-bar-toggle" (click)="toggleRightSidebar()">
           <i class="bx bx-cog bx-spin"></i>
         </button>
       </div>
-
     </div>
   </div>
 </header>

@@ -12,6 +12,7 @@ import { EmailService } from 'src/app/core/services/email.service';
 @Component({
   selector: 'app-voucher',
   templateUrl: './voucher.component.html',
+  styleUrls: ['./voucher.component.scss']
 })
 export class VoucherComponent implements OnInit {
   vouchers: any[] = [];

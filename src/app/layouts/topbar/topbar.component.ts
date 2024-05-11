@@ -26,9 +26,6 @@ export class TopbarComponent implements OnInit {
   mode: any
   element: any;
   cookieValue: any;
-  flagvalue: any;
-  countryName: any;
-  valueset: any;
   theme: any;
   layout: string;
   dataLayout$: Observable<string>;
@@ -42,37 +39,22 @@ export class TopbarComponent implements OnInit {
 
   }
 
-  listLang: any = [
-   // { text: 'English', flag: 'assets/images/flags/us.jpg', lang: 'en' },
-    { text: 'Spanish', flag: 'assets/images/flags/spain.jpg', lang: 'es' },
-  ];
-
   openMobileMenu: boolean;
 
   @Output() settingsButtonClicked = new EventEmitter();
   @Output() mobileMenuButtonClicked = new EventEmitter();
 
   ngOnInit() {
-    // this.initialAppState = initialState;
     this.store.select('layout').subscribe((data) => {
       this.theme = data.DATA_LAYOUT;
-    })
+    });
     this.openMobileMenu = false;
     this.element = document.documentElement;
 
     this.cookieValue = this._cookiesService.get('lang');
-    const val = this.listLang.filter(x => x.lang === this.cookieValue);
-    this.countryName = val.map(element => element.text);
-    if (val.length === 0) {
-      if (this.flagvalue === undefined) { this.valueset = 'assets/images/flags/us.jpg'; }
-    } else {
-      this.flagvalue = val.map(element => element.flag);
-    }
   }
 
-  setLanguage(text: string, lang: string, flag: string) {
-    this.countryName = text;
-    this.flagvalue = flag;
+  setLanguage(lang: string) {
     this.cookieValue = lang;
     this.languageService.setLanguage(lang);
   }
