@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from 'src/app/core/services/voucherapi.service';
 import { HttpParams } from '@angular/common/http';
 import jsPDF from 'jspdf';
-import * as xml2js from 'xml2js';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -69,13 +68,20 @@ export class VoucherComponent implements OnInit {
     this.dataSource.filter = filtro;
     this.dataSource.filterPredicate = (data: any) => {
       const dataStr = Object.keys(data).reduce((concatenated, key) => {
-        if (key === 'voucherTypeCode') {
-          return concatenated + data[key];
-        }
         return concatenated + (data[key] ? data[key].toString().toLowerCase() : '');
       }, '');
-      return dataStr.includes(filtro);
+      return dataStr.includes(filtro) || data.ruc.includes(filtro) || data.voucherTypeCode.includes(filtro);
     };
+  }
+  
+
+  applyNumberFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim();
+    
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      return data.voucherTypeCode.includes(filter);
+    };
+    this.dataSource.filter = filterValue;
   }
   
 
