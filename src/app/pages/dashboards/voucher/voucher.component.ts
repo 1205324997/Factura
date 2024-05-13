@@ -74,23 +74,14 @@ export class VoucherComponent implements OnInit {
   aplicarFiltro(event: Event): void {
     const filtro = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.dataSource.filter = filtro;
-    this.dataSource.filterPredicate = (data: any) => {
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
       const dataStr = Object.keys(data).reduce((concatenated, key) => {
         return concatenated + (data[key] ? data[key].toString().toLowerCase() : '');
       }, '');
-      return dataStr.includes(filtro) || data.ruc.includes(filtro) || data.voucherTypeCode.includes(filtro);
+      return dataStr.includes(filtro) || data.ruc.includes(filtro) || data.voucherTypeCode.includes(filtro) || data.businessName.includes(filtro) || data.voucherTypeCode.includes(filter);
     };
   }
   
-
-  applyNumberFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim();
-    
-    this.dataSource.filterPredicate = (data: any, filter: string) => {
-      return data.voucherTypeCode.includes(filter);
-    };
-    this.dataSource.filter = filterValue;
-  }
   
 
   filtrarPorFechas(): void {
