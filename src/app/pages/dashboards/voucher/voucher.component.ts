@@ -18,6 +18,8 @@ export class VoucherComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = ['voucherTypeCode','voucherType', 'businessName', 'ruc', 'status', 'statusSri', 'broadcastDate', 'acciones', 'sendEmail'];
   filteredVouchers: any[] = []; 
+  mostrarFormularioEmail = false;
+
 
   columnasTraducidas = {
     'voucherTypeCode': 'Código',
@@ -38,8 +40,14 @@ export class VoucherComponent implements OnInit {
   constructor(private apiService: ApiService, private emailService: EmailService ) {}
 
   ngOnInit(): void {
+    this.emailService.mostrarFormularioEmail$.subscribe(
+      (mostrar: boolean) => {
+        this.mostrarFormularioEmail = mostrar;
+      }
+    );
     console.log("Componente Voucher inicializado.");
     this.obtenerVouchers();
+    
   }
 
   obtenerVouchers(): void {
@@ -146,28 +154,10 @@ export class VoucherComponent implements OnInit {
   }
 
   enviarCorreo(voucher: any): void {
-    const destinatario = 'destinatario@example.com';
-    const asunto = `Voucher ${voucher.id}`;
-    const cuerpo = `Adjunto encontrarás el voucher ${voucher.id}`;
-    const adjuntos = [`voucher_${voucher.id}.pdf`, `voucher_${voucher.id}.xml`];
-    const datosCorreo = {
-      emails: [destinatario],
-      subject: asunto,
-      body: cuerpo,
-      attachments: adjuntos
-    };
-    this.emailService.enviarCorreo(datosCorreo)
-      .then(response => {
-        console.log('Correo enviado correctamente:', response);
-      })
-      .catch(error => {
-        console.error('Error al enviar el correo:', error);
-      });
+    this.mostrarFormularioEmail = true;
   }
-  
 
-
-  // Función para capitalizar las palabras
+    // Función para capitalizar las palabras
   capitalize(value: string): string {
     if (!value) return value;
     return value.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');

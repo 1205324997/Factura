@@ -1,0 +1,25 @@
+<div class="email-form-container">
+    <div class="email-header">
+        <h2 style="color: #1c2130;">Mensaje nuevo</h2>
+        <button class="close-btn" (click)="cancelarEnvio()">X</button>
+    </div>
+    <div class="email-form">
+        <div>
+            <label for="emails">Para:</label>
+            <input type="text" id="emails" [(ngModel)]="emailData.emails">
+        </div>
+        <div>
+            <label for="subject">Asunto:</label>
+            <input type="text" id="subject" [(ngModel)]="emailData.subject">
+        </div>
+        <div>
+            <label for="body">Cuerpo:</label>
+            <textarea id="body" [(ngModel)]="emailData.body"></textarea>
+        </div>
+        <div>
+            <label for="attachments">Adjuntar Archivo:</label>
+            <input type="file" id="attachments" (change)="handleFileInput($event)">
+        </div>
+        <button (click)="enviarCorreo()">Enviar Correo</button>
+    </div>
+</div>

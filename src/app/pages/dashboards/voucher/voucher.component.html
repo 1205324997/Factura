@@ -46,8 +46,10 @@
               </div>
             </ng-container>
             <ng-container *ngIf="column === 'sendEmail'">
-              <button mat-raised-button (click)="enviarCorreo(voucher)">enviar Email</button>
-            </ng-container>
+              <button mat-icon-button color="primary" aria-label="Example email icon" (click)="enviarCorreo(voucher)">
+                <mat-icon style="color: #1c2130;">email</mat-icon>
+              </button>
+          </ng-container>
             <ng-container *ngIf="column !== 'acciones'">
               {{ capitalize(voucher[column]) }}
             </ng-container>
@@ -65,3 +67,7 @@
     <mat-paginator [pageSizeOptions]="[5]" aria-label="Seleccionar página de vouchers"></mat-paginator>
   </div>
 </div>
+<app-email *ngIf="mostrarFormularioEmail" [ngClass]="'enviar-correo'">
+</app-email>
+
+

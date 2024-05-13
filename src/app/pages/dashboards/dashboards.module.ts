@@ -30,10 +30,11 @@ import {MatButtonModule} from '@angular/material/button';
 
 import { DefaultComponent } from './default/default.component';
 import { VoucherComponent } from 'src/app/pages/dashboards/voucher/voucher.component';
+import { EmailComponent } from './email/email.component';
 
 
 @NgModule({
-  declarations: [DefaultComponent, VoucherComponent], 
+  declarations: [DefaultComponent, VoucherComponent, EmailComponent], 
   imports: [
     CommonModule,
     MatIconModule,
