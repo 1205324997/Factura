@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Subject } from 'rxjs';
 
-interface EmailData {
+export interface EmailData {
   emails: string[];
   subject: string;
   body: string;
@@ -12,25 +13,21 @@ interface EmailData {
   providedIn: 'root'
 })
 export class EmailService {
-  protected static base_url = 'http://notificaciones.backcobasoft.net/';
-  protected static version = 'notifications/v1';
 
   constructor(private http: HttpClient) { }
 
-  enviarCorreo(datosCorreo: EmailData): Promise<any> {
-    if (!this.validarDatosCorreo(datosCorreo)) {
-      return Promise.reject('Datos de correo inválidos');
-    }
+  enviarCorreo(data: EmailData) {
+    const url = 'https://notificaciones.backcobasoft.net/notifications/v1/email/message';
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    return this.http.post(url, data, { headers }).toPromise();
+  }
+  
+//Comunicacion de vista para componentes
+  private mostrarFormularioEmailSource = new Subject<boolean>();
+  mostrarFormularioEmail$ = this.mostrarFormularioEmailSource.asObservable();
 
-    const url = `${EmailService.base_url}${EmailService.version}/email/message`;
-    return this.http.post(url, datosCorreo).toPromise();
+  cambiarMostrarFormularioEmail(mostrar: boolean): void {
+    this.mostrarFormularioEmailSource.next(mostrar);
   }
 
-  public validarDatosCorreo(datosCorreo: EmailData): boolean {
-    if (!(datosCorreo.emails && datosCorreo.emails.length > 0 &&
-          datosCorreo.subject && datosCorreo.body)) {
-      throw new Error('Datos de correo inválidos');
-    }
-    return true;
-  }  
 }

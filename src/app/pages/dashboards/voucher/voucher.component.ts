@@ -16,19 +16,18 @@ import { EmailService } from 'src/app/core/services/email.service';
 export class VoucherComponent implements OnInit {
   vouchers: any[] = [];
   dataSource: MatTableDataSource<any>;
-  displayedColumns: string[] = ['voucherTypeCode','voucherType', 'businessName', 'ruc', 'status', 'statusSri', 'broadcastDate', 'acciones', 'sendEmail'];
+  displayedColumns: string[] = ['sequential', 'business_name', 'ruc', 'status', 'status_sri', 'broadcast_date', 'acciones', 'sendEmail'];
   filteredVouchers: any[] = []; 
   mostrarFormularioEmail = false;
 
 
   columnasTraducidas = {
-    'voucherTypeCode': 'Código',
-    'voucherType': 'Comprobante',
-    'businessName': 'Nombre',
+    'sequential': 'Código',
+    'business_name': 'Nombre',
     'ruc': 'RUC',
     'status': 'Estado',
-    'statusSri': 'Estado SRI',
-    'broadcastDate': 'Fecha de Emisión',
+    'status_sri': 'Estado SRI',
+    'broadcast_date': 'Fecha de Emisión',
     'acciones': 'Acciones',
     'sendEmail': 'Enviar correo'
   };
@@ -78,10 +77,11 @@ export class VoucherComponent implements OnInit {
       const dataStr = Object.keys(data).reduce((concatenated, key) => {
         return concatenated + (data[key] ? data[key].toString().toLowerCase() : '');
       }, '');
-      return dataStr.includes(filtro) || data.ruc.includes(filtro) || data.voucherTypeCode.includes(filtro) || data.businessName.includes(filtro) || data.voucherTypeCode.includes(filter);
+  
+      // Verificar si las propiedades son válidas antes de llamar a includes
+      return dataStr.includes(filtro) || (data.sequential && data.sequential.includes(filtro)) || (data.business_name && data.business_name.includes(filtro)) || (data.status_sri && data.status_sri.includes(filter));
     };
   }
-  
   
 
   filtrarPorFechas(): void {
@@ -90,7 +90,7 @@ export class VoucherComponent implements OnInit {
   
     if (fechaDesde && fechaHasta) {
       this.filteredVouchers = this.vouchers.filter(voucher => {
-        const fechaVoucher = new Date(voucher.broadcastDate);
+        const fechaVoucher = new Date(voucher.broadcast_date);
         const fechaDesdeObj = new Date(fechaDesde);
         const fechaHastaObj = new Date(fechaHasta);
   
@@ -109,7 +109,7 @@ export class VoucherComponent implements OnInit {
     const doc = new jsPDF();
     let voucherTexto = '';
 
-    // Generar el texto del voucher basado en los datos del voucher
+    // Generamos el texto del voucher basado en los datos del voucher
     for (const key in voucher) {
       if (voucher.hasOwnProperty(key) && this.displayedColumns.includes(key)) {
         voucherTexto += `${this.columnasTraducidas[key]}: ${voucher[key]}\n`;
@@ -123,7 +123,7 @@ export class VoucherComponent implements OnInit {
   descargarXML(voucher: any): void {
     let xmlString = '<?xml version="1.0" encoding="UTF-8"?>\n<voucher>\n';
 
-    // Generar el XML del voucher basado en los datos del voucher
+    // Generamos el XML del voucher basado en los datos del voucher
     for (const key in voucher) {
       if (voucher.hasOwnProperty(key) && this.displayedColumns.includes(key)) {
         xmlString += `\t<${key}>${voucher[key]}</${key}>\n`;
@@ -148,9 +148,10 @@ export class VoucherComponent implements OnInit {
     this.mostrarFormularioEmail = true;
   }
 
-    // Función para capitalizar las palabras
-  capitalize(value: string): string {
-    if (!value) return value;
-    return value.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
-  }
+// Función para capitalizar las palabras
+capitalize(value: string): string {
+  if (typeof value !== 'string') return value;
+  return value.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+}
+
 }

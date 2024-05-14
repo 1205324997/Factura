@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -7,25 +7,37 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  protected static base_url = 'http://3.93.5.254:8030/';
-  protected static version = 'sri/v1';
+  protected static base_url = 'https://factux.backcobasoft.net/';
+  protected static version = 'v1';
   private filtroTipoFactura: string;
 
   constructor(public http: HttpClient, private router: Router) { }
 
+  private getHeaders(): HttpHeaders {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZWdvY2lvIiwiZXhwIjoxNzE1NjY0NjUyfQ.6QriXWDhA0KwRtd5XjZ6FUTDZXkhG8Ch-dYfX0FXH6E`
+    });
+    return headers;
+  }
+  
   public setFiltroTipoFactura(tipoFactura: string): void {
     this.filtroTipoFactura = tipoFactura;
   }
 
   public getVouchers(params: HttpParams): Observable<any> {
-    const url = `${ApiService.base_url}${ApiService.version}/vouchers`;
+    const url = `${ApiService.base_url}${ApiService.version}/vouchers/?pageSize=100&startIndex=0&environment=1`;
+
     if (this.filtroTipoFactura) {
       params = params.set('tipoFactura', this.filtroTipoFactura);
     }
-    return this.http.get<any>(url, { params });
+    const headers = this.getHeaders(); 
+    return this.http.get<any>(url, { headers, params });
   }
+  
 
   redirectToUrl(url: string): void {
     this.router.navigateByUrl(url);
   }
 }
+
