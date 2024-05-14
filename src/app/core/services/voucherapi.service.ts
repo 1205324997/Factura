@@ -34,6 +34,13 @@ export class ApiService {
     const headers = this.getHeaders(); 
     return this.http.get<any>(url, { headers, params });
   }
+
+  //Peticion descarga facturas pdf
+  public getPdfVoucher(id: string, environment: number): Observable<any> {
+    const url = `${ApiService.base_url}${ApiService.version}/vouchers/pdf/${id}?environment=${environment}`;
+    const headers = this.getHeaders();
+    return this.http.get<any>(url, { headers, responseType: 'blob' as 'json' }); 
+  }
   
 
   redirectToUrl(url: string): void {

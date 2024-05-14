@@ -7,7 +7,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { EmailService } from 'src/app/core/services/email.service';
 
-
 @Component({
   selector: 'app-voucher',
   templateUrl: './voucher.component.html',
@@ -20,7 +19,6 @@ export class VoucherComponent implements OnInit {
   filteredVouchers: any[] = []; 
   mostrarFormularioEmail = false;
 
-
   columnasTraducidas = {
     'sequential': 'Código',
     'business_name': 'Nombre',
@@ -31,7 +29,6 @@ export class VoucherComponent implements OnInit {
     'acciones': 'Acciones',
     'sendEmail': 'Enviar correo'
   };
-
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -46,7 +43,20 @@ export class VoucherComponent implements OnInit {
     );
     console.log("Componente Voucher inicializado.");
     this.obtenerVouchers();
-    
+  }
+
+  ngAfterViewInit(): void {
+    if (this.dataSource) {
+      this.dataSource.filterPredicate = (data: any, filter: string) => {
+        const dataStr = Object.keys(data).reduce((concatenated, key) => {
+          return concatenated + (data[key] ? data[key].toString().toLowerCase() : '');
+        }, '');
+
+        const sequentialWithoutZeros = data.sequential.replace(/^0+/, '');
+
+        return dataStr.includes(filter) || (sequentialWithoutZeros.includes(filter))  || (data.business_name && data.business_name.includes(filter)) || (data.status_sri && data.status_sri.includes(filter));
+      };
+    }
   }
 
   obtenerVouchers(): void {
@@ -63,6 +73,7 @@ export class VoucherComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         console.log("Respuesta del servicio recibida:", this.vouchers);
+        this.ngAfterViewInit();
       },
       (error) => {
         console.error('Error al obtener vouchers:', error);
@@ -73,16 +84,7 @@ export class VoucherComponent implements OnInit {
   aplicarFiltro(event: Event): void {
     const filtro = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.dataSource.filter = filtro;
-    this.dataSource.filterPredicate = (data: any, filter: string) => {
-      const dataStr = Object.keys(data).reduce((concatenated, key) => {
-        return concatenated + (data[key] ? data[key].toString().toLowerCase() : '');
-      }, '');
-  
-      // Verificar si las propiedades son válidas antes de llamar a includes
-      return dataStr.includes(filtro) || (data.sequential && data.sequential.includes(filtro)) || (data.business_name && data.business_name.includes(filtro)) || (data.status_sri && data.status_sri.includes(filter));
-    };
   }
-  
 
   filtrarPorFechas(): void {
     const fechaDesde = (document.getElementById('fechaDesde') as HTMLInputElement).value;
@@ -106,18 +108,21 @@ export class VoucherComponent implements OnInit {
   }
 
   descargarPDF(voucher: any): void {
-    const doc = new jsPDF();
-    let voucherTexto = '';
-
-    // Generamos el texto del voucher basado en los datos del voucher
-    for (const key in voucher) {
-      if (voucher.hasOwnProperty(key) && this.displayedColumns.includes(key)) {
-        voucherTexto += `${this.columnasTraducidas[key]}: ${voucher[key]}\n`;
+    this.apiService.getPdfVoucher(voucher.id, 1).subscribe(
+      (pdfBlob: Blob) => {
+        const url = window.URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `voucher_${voucher.id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      },
+      (error) => {
+        console.error('Error al descargar el PDF del voucher:', error);
       }
-    }
-
-    doc.text(voucherTexto, 10, 10);
-    doc.save(`voucher_${voucher.id}.pdf`);
+    );
   }
 
   descargarXML(voucher: any): void {
@@ -148,10 +153,9 @@ export class VoucherComponent implements OnInit {
     this.mostrarFormularioEmail = true;
   }
 
-// Función para capitalizar las palabras
-capitalize(value: string): string {
-  if (typeof value !== 'string') return value;
-  return value.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
-}
-
+  // Función para capitalizar las palabras
+  capitalize(value: string): string {
+    if (typeof value !== 'string') return value;
+    return value.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+  }
 }
