@@ -42,7 +42,6 @@ export class ApiService {
     return this.http.get<any>(url, { headers, responseType: 'blob' as 'json' }); 
   }
   
-
   redirectToUrl(url: string): void {
     this.router.navigateByUrl(url);
   }
