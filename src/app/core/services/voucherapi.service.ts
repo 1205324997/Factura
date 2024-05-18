@@ -16,7 +16,7 @@ export class ApiService {
   private getHeaders(): HttpHeaders {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZWdvY2lvIiwiZXhwIjoxNzE1NjY0NjUyfQ.6QriXWDhA0KwRtd5XjZ6FUTDZXkhG8Ch-dYfX0FXH6E`
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZWdvY2lvIiwiZXhwIjoxNzE1ODQzNjk2fQ.-002uCuLxw0Uj0R-5VYcPhYlz9H2OpIa5sM-lTmnDA0`
     });
     return headers;
   }
