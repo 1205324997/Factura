@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { User } from 'src/app/store/Authentication/auth.models';
@@ -5,7 +6,7 @@ import { User } from 'src/app/store/Authentication/auth.models';
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
 
-    constructor() { }
+    constructor(private http: HttpClient) { }
 
     /**
      * Returns the current user
@@ -24,10 +25,18 @@ export class AuthenticationService {
      *                  { business_id, username, password }
      */
     login(loginData: { business_id: string, username: string, password: string }): Observable<any> {
-        // Aquí puedes implementar la lógica de inicio de sesión sin Firebase
-        // Por ahora, simplemente devolveremos un observable vacío.
-        return of(null);
+        // Construye el cuerpo de la solicitud
+        const body = {
+            business_id: loginData.business_id,
+            username: loginData.username,
+            password: loginData.password
+        };
+        
+        // Realiza la solicitud POST al endpoint de autenticación
+        return this.http.post<any>('https://factux.backcobasoft.net/v1/auth/', body);
     }
+
+    // Otros métodos del servicio...
 
     /**
      * Performs the register
