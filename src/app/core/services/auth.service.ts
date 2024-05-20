@@ -1,33 +1,32 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Observable, of } from 'rxjs';
 import { User } from 'src/app/store/Authentication/auth.models';
-import { from } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
 
-    constructor(private afAuth: AngularFireAuth) { }
+    constructor() { }
 
     /**
      * Returns the current user
      */
-    public currentUser(): Promise<User | null> {
-        return new Promise((resolve, reject) => {
-            this.afAuth.onAuthStateChanged((user) => {
-                resolve(user);
-            }, (error) => {
-                reject(error);
-            });
-        });
+    public currentUser(): Observable<User | null> {
+        // Aquí puedes implementar la lógica para obtener el usuario actual
+        // Por ejemplo, puedes almacenar el usuario en el almacenamiento local
+        // y luego recuperarlo cuando sea necesario.
+        // Por ahora, simplemente devolveremos un observable vacío.
+        return of(null);
     }
 
     /**
      * Performs the login
-     * @param email email of user
-     * @param password password of user
+     * @param loginData Objeto que contiene los datos de inicio de sesión
+     *                  { business_id, username, password }
      */
-    login(email: string, password: string) {
-        return from(this.afAuth.signInWithEmailAndPassword(email, password));
+    login(loginData: { business_id: string, username: string, password: string }): Observable<any> {
+        // Aquí puedes implementar la lógica de inicio de sesión sin Firebase
+        // Por ahora, simplemente devolveremos un observable vacío.
+        return of(null);
     }
 
     /**
@@ -35,22 +34,28 @@ export class AuthenticationService {
      * @param email email
      * @param password password
      */
-    register(email: string, password: string) {
-        return from(this.afAuth.createUserWithEmailAndPassword(email, password));
+    register(email: string, password: string): Observable<any> {
+        // Aquí puedes implementar la lógica de registro sin Firebase
+        // Por ahora, simplemente devolveremos un observable vacío.
+        return of(null);
     }
 
     /**
      * Reset password
      * @param email email
      */
-    resetPassword(email: string) {
-        return from(this.afAuth.sendPasswordResetEmail(email));
+    resetPassword(email: string): Observable<any> {
+        // Aquí puedes implementar la lógica para restablecer la contraseña sin Firebase
+        // Por ahora, simplemente devolveremos un observable vacío.
+        return of(null);
     }
 
     /**
      * Logout the user
      */
-    logout() {
-        return from(this.afAuth.signOut());
+    logout(): Observable<any> {
+        // Aquí puedes implementar la lógica para cerrar sesión sin Firebase
+        // Por ahora, simplemente devolveremos un observable vacío.
+        return of(null);
     }
 }

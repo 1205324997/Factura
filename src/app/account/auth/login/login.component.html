@@ -32,14 +32,14 @@
                   <alert type="danger" [dismissible]="false">{{ error }}</alert>
                 </ng-container>
                 <div class="mb-3">
-                  <label for="email">Email</label>
-                  <input type="email" formControlName="email" class="form-control" id="email" placeholder="Email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
-                  @if(submitted && f.email.errors){
+                  <label for="username">username</label>
+                  <input type="username" formControlName="username" class="form-control" id="username" placeholder="username" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                  @if(submitted && f.username.errors){
                   <div class="invalid-feedback">
-                    @if(f.email.errors.required){
-                    <div>Email is required</div>
-                    }@if(f.email.errors.email){
-                    <div>Email must be a valid email address</div>
+                    @if(f.username.errors.required){
+                    <div>username is required</div>
+                    }@if(f.username.errors.username){
+                    <div>username must be a valid username address</div>
                     }
                   </div>
                   }

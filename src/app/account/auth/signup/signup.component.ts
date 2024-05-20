@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../../../core/services/auth.service';
 import { UserProfileService } from '../../../core/services/user.service';
 import { Store } from '@ngrx/store';
-import { Register } from 'src/app/store/Authentication/authentication.actions';
 import { FirestoreService } from 'src/app/core/services/firestore.service';
 import { User } from 'src/app/store/Authentication/auth.models';
 

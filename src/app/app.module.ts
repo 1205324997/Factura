@@ -29,14 +29,11 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 // Auth
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { ErrorInterceptor } from './core/helpers/error.interceptor';
-import { JwtInterceptor } from './core/helpers/jwt.interceptor';
 import { rootReducer } from './store';
-import { AuthenticationEffects } from './store/Authentication/authentication.effects';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { provideFirebaseApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
-import { FirestoreComponent } from './firebase/firestore/firestore.component';
+import { JwtInterceptor } from './core/helpers/jwt.interceptor';
 if (environment.defaultauth === 'firebase') {
   initFirebaseBackend(environment.firebaseConfig),
   provideFirestore(() => getFirestore())
@@ -81,7 +78,6 @@ export function createTranslateLoader(http: HttpClient): any {
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
     EffectsModule.forRoot([
-      AuthenticationEffects,
     ]),
   ],
   bootstrap: [AppComponent],
