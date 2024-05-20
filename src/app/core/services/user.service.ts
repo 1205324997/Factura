@@ -4,6 +4,9 @@ import { User } from 'src/app/store/Authentication/auth.models';
 
 @Injectable({ providedIn: 'root' })
 export class UserProfileService {
+    addUser(user: User) {
+      throw new Error('Method not implemented.');
+    }
     constructor(private http: HttpClient) { }
     /***
      * Get All User

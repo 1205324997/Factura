@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { User } from 'src/app/store/Authentication/auth.models';
 
 @Injectable({ providedIn: 'root' })
@@ -12,31 +12,31 @@ export class AuthenticationService {
      * Returns the current user
      */
     public currentUser(): Observable<User | null> {
-        // Aquí puedes implementar la lógica para obtener el usuario actual
-        // Por ejemplo, puedes almacenar el usuario en el almacenamiento local
-        // y luego recuperarlo cuando sea necesario.
-        // Por ahora, simplemente devolveremos un observable vacío.
         return of(null);
     }
 
     /**
      * Performs the login
-     * @param loginData Objeto que contiene los datos de inicio de sesión
-     *                  { business_id, username, password }
+     * @param loginData
      */
     login(loginData: { business_id: string, username: string, password: string }): Observable<any> {
-        // Construye el cuerpo de la solicitud
         const body = {
             business_id: loginData.business_id,
             username: loginData.username,
             password: loginData.password
         };
         
-        // Realiza la solicitud POST al endpoint de autenticación
-        return this.http.post<any>('https://factux.backcobasoft.net/v1/auth/', body);
+        return this.http.post<any>('https://factux.backcobasoft.net/v1/auth/', body)
+            .pipe(
+                tap(response => {
+                    if (response && response.access_token) {
+                        localStorage.setItem('token', response.access_token);
+                    }
+                })
+            );
     }
+    
 
-    // Otros métodos del servicio...
 
     /**
      * Performs the register
@@ -44,18 +44,15 @@ export class AuthenticationService {
      * @param password password
      */
     register(email: string, password: string): Observable<any> {
-        // Aquí puedes implementar la lógica de registro sin Firebase
-        // Por ahora, simplemente devolveremos un observable vacío.
-        return of(null);
-    }
+        const url = 'https://your-api-url.com/register';
+        return this.http.post(url, { email, password });
+      }
 
     /**
      * Reset password
      * @param email email
      */
     resetPassword(email: string): Observable<any> {
-        // Aquí puedes implementar la lógica para restablecer la contraseña sin Firebase
-        // Por ahora, simplemente devolveremos un observable vacío.
         return of(null);
     }
 
@@ -63,8 +60,6 @@ export class AuthenticationService {
      * Logout the user
      */
     logout(): Observable<any> {
-        // Aquí puedes implementar la lógica para cerrar sesión sin Firebase
-        // Por ahora, simplemente devolveremos un observable vacío.
         return of(null);
     }
 }

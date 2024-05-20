@@ -16,92 +16,22 @@
       <button type="button" class="btn btn-sm px-3 font-size-16 header-item" [ngClass]="{ 'd-none': theme === 'horizontal' }" id="vertical-menu-btn" (click)="toggleMobileMenu($event)">
         <i class="fa fa-fw fa-bars"></i>
       </button>
-
-      <!-- Dropdown Mega Menu -->
-      <div class="dropdown-mega d-none d-lg-block ms-2" dropdown>
-        <div class="dropdown-menu dropdown-megamenu" *dropdownMenu>
-          <div class="row">
-            <div class="col-sm-8">
-              <div class="row">
-                <div class="col-md-4">
-                </div>
-                <div class="col-md-4">
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="row">
-                <div class="col-sm-6">
-                  <h5 class="font-size-14 mt-0">{{ 'HEADER.UI.TITLE' | translate}}</h5>
-                </div>
-                <div class="col-sm-5">
-                  <div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <div class="d-flex">
-      <!-- Search Button (for small screens) -->
-      <div class="dropdown d-inline-block d-lg-none ms-2" dropdown>
-        <button type="button" class="btn header-item noti-icon" id="page-header-search-dropdown" data-toggle="dropdown" aria-haspopup="true" dropdownToggle aria-expanded="false">
-          <i class="mdi mdi-magnify"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" *dropdownMenu aria-labelledby="page-header-search-dropdown">
-          <form class="p-3">
-            <div class="m-0">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
-                <div class="input-group-append">
-                  <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-
       <!-- Fullscreen Button -->
-      <div class="dropdown d-none d-lg-inline-block ms-1">
+      <div class="dropdown d-lg-inline-block ms-1">
         <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen" (click)="fullscreen()">
           <i class="bx bx-fullscreen"></i>
         </button>
       </div>
 
-      <!-- Notifications Dropdown -->
-      <div class="dropdown d-inline-block" dropdown>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown" *dropdownMenu>
-          <div class="p-3">
-            <div class="row align-items-center">
-              <div class="col">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- User Dropdown -->
-      <div class="dropdown d-inline-block" dropdown>
-        <button type="button" class="btn header-item" dropdownToggle id="page-header-user-dropdown">
-         <span class="d-none d-xl-inline-block ms-1">User </span>
-          <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-end" *dropdownMenu>
-          <a class="dropdown-item text-danger" href="javascript:void(0);" (click)="logout()">
-            <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
-            {{ 'HEADER.LOGIN.LOGOUT' | translate}}
-          </a>
-        </div>
-      </div>
-
-      <!-- Right Sidebar Toggle Button -->
-      <div class="dropdown d-inline-block">
-        <button type="button" class="btn header-item noti-icon right-bar-toggle" (click)="toggleRightSidebar()">
-          <i class="bx bx-cog bx-spin"></i>
+      <div class="ms-1">
+        <button type="button" class="btn header-item text-danger" (click)="logout()">
+          <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
+          <span class="d-xl-inline-block">Cerrar sesión</span>
         </button>
       </div>
     </div>

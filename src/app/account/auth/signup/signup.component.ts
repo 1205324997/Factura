@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { AuthenticationService } from '../../../core/services/auth.service';
-import { UserProfileService } from '../../../core/services/user.service';
 import { Store } from '@ngrx/store';
-import { FirestoreService } from 'src/app/core/services/firestore.service';
 import { User } from 'src/app/store/Authentication/auth.models';
 
 @Component({
@@ -23,8 +20,7 @@ export class SignupComponent implements OnInit {
   // set the current year
   year: number = new Date().getFullYear();
 
-  constructor(private formBuilder: UntypedFormBuilder, private route: ActivatedRoute, private router: Router, private authenticationService: AuthenticationService,
-    private userService: UserProfileService, public store: Store, private firestoreService: FirestoreService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private router: Router, public store: Store) { }
 
   ngOnInit() {
     this.signupForm = this.formBuilder.group({
@@ -55,34 +51,22 @@ export class SignupComponent implements OnInit {
   
     console.log("Datos del formulario:", email, ruc, name, password);
   
-    // User Registered in Firebase Authentication
-    this.authenticationService.register(email, password)
-      .subscribe((authResult: any) => { 
-          
-        const user: User = {
-          email: email,
-          username: name,
-          password: password,
-          ruc: ruc
-        };
-  
-        console.log("Usuario a agregar en Firestore:", user);
-  
-        // Saving additional information in Cloud Firestore
-        this.firestoreService.addUser(user)
-          .then(() => {
-            console.log("Usuario agregado con éxito en Firestore");
-            localStorage.setItem('registeredUser', JSON.stringify(user));
-            this.successmsg = true;
-          })
-          .catch(error => {
-            console.error("Error al agregar usuario en Firestore:", error);
-            this.error = error.message;
-          });
-      }, error => {
-        // Handling registration errors in Firebase Authentication
-        console.error("Error al registrar usuario en Firebase:", error);
-        this.error = error.message;
-      });
+    // Simulación de registro sin servicios externos
+    const user: User = {
+      email: email,
+      username: name,
+      password: password,
+      ruc: ruc
+    };
+
+    try {
+      // Simular el almacenamiento del usuario en localStorage
+      localStorage.setItem('registeredUser', JSON.stringify(user));
+      console.log("Usuario registrado con éxito");
+      this.successmsg = true;
+    } catch (error) {
+      console.error("Error al registrar usuario:", error);
+      this.error = error.message;
+    }
   }
 }

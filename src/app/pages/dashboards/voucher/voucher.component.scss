@@ -24,11 +24,6 @@ tr:nth-child(odd) {
   background-color: #2a314611; 
 }
 
-.Search input {
-  width: 150px; 
-  border: 1px solid black; 
-}
-
 .enviar-correo {
   position: absolute;
   top: 50%;
@@ -41,6 +36,16 @@ tr:nth-child(odd) {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.search{
+  margin: 5px;
+}
 
-
-
+.search-i {
+    border-color: #1c213056;
+    border-width: 1px; 
+    border-radius: 5px;
+  }
+  
+label{
+  margin: 0px;
+}

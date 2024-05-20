@@ -1,29 +1,41 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-lg-9 col-md-8 col-sm-12">
-      
       <!-- Filtro de fechas -->
-      <div class="filtroFecha">
-        <div>
-          <label for="fechaDesde">Desde:</label>
-          <input type="date" id="fechaDesde" (change)="filtrarPorFechas()">
-        </div>
-        <div>
-          <label for="fechaHasta">Hasta:</label>
-          <input type="date" id="fechaHasta" (change)="filtrarPorFechas()">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-9 col-md-8 col-sm-12">
+            <!-- Filtro de fechas -->
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-9 col-md-8 col-sm-12 d-flex align-items-start justify-content-between">
+                  <div class="row">
+                    <div class="desde col-lg-6 col-md- col-sm-12">
+                      <div class="filtroFecha mb-2">
+                        <label for="fechaDesde" class="form-label">Desde:</label>
+                        <input type="date" class="form-control" id="fechaDesde" (change)="filtrarPorFechas()" style="width: 150px;">
+                      </div>
+                    </div>
+                    <div class="hasta col-md-6">
+                      <div class="filtroFecha mb-2">
+                        <label for="fechaHasta" class="form-label">Hasta:</label>
+                        <input type="date" class="form-control" id="fechaHasta" (change)="filtrarPorFechas()" style="width: 150px;">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Filtro de búsqueda -->
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-end">
-      
-      <!-- Filtro de búsqueda -->
-      <div class="Search">
-        <mat-form-field>
-          <input matInput (keyup)="aplicarFiltro($event)" placeholder="Buscar...">
-        </mat-form-field>
+    <div class="col-lg-3 col-md-4 col-sm-12">
+      <div class="search">
+        <input class="search-i" matInput (keyup)="aplicarFiltro($event)" placeholder="Buscar..." style="height: 35px; width: 200px;">
       </div>
     </div>
-    
   </div>
 </div>
 
@@ -50,7 +62,7 @@
               <button mat-icon-button color="primary" aria-label="Example email icon" (click)="enviarCorreo(voucher)">
                 <mat-icon style="color: #1c2130;">email</mat-icon>
               </button>
-          </ng-container>
+            </ng-container>
             <ng-container *ngIf="column !== 'acciones'">
               {{ capitalize(voucher[column]) }}
             </ng-container>
@@ -70,5 +82,3 @@
 </div>
 <app-email *ngIf="mostrarFormularioEmail" [ngClass]="'enviar-correo'">
 </app-email>
-
-

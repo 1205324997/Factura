@@ -7,11 +7,11 @@ import { AlertModule } from 'ngx-bootstrap/alert';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { UIModule } from '../../shared/ui/ui.module';
 import { LoginComponent } from './login/login.component';
-import { SignupComponent } from './signup/signup.component';
 import { AuthRoutingModule } from './auth-routing';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent],
+  declarations: [LoginComponent, SignupComponent ],
   imports: [
     CommonModule,
     ReactiveFormsModule,

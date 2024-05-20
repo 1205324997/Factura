@@ -32,6 +32,7 @@ export class VoucherComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+Hasta: any;
 
   constructor(private apiService: ApiService, private emailService: EmailService ) {}
 

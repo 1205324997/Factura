@@ -22,25 +22,15 @@ import { ExtrapagesModule } from './extrapages/extrapages.module';
 import { LayoutsModule } from './layouts/layouts.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { initFirebaseBackend } from './authUtils';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 // Auth
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
-import { ErrorInterceptor } from './core/helpers/error.interceptor';
 import { rootReducer } from './store';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
-import { JwtInterceptor } from './core/helpers/jwt.interceptor';
-if (environment.defaultauth === 'firebase') {
-  initFirebaseBackend(environment.firebaseConfig),
-  provideFirestore(() => getFirestore())
-} else {
-  // tslint:disable-next-line: no-unused-expression
 
-}
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -54,7 +44,7 @@ export function createTranslateLoader(http: HttpClient): any {
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireModule.initializeApp(environment.Config),
     AngularFireAuthModule,
     TranslateModule.forRoot({
       loader: {
@@ -82,8 +72,7 @@ export function createTranslateLoader(http: HttpClient): any {
   ],
   bootstrap: [AppComponent],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  
   ],
 })
 export class AppModule { }
