@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { ApiService } from 'src/app/core/services/voucherapi.service';// Importa tu servicio ApiService aquí
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private apiService: ApiService // Inyecta el servicio ApiService aquí
   ) {}
 
   ngOnInit() {
@@ -61,6 +63,8 @@ export class LoginComponent implements OnInit {
           // Si se recibe un token en la respuesta, encriptarlo y guardarlo en el almacenamiento local
           const encryptedToken = this.hashToken(response.access_token);
           localStorage.setItem('token', encryptedToken);
+          // Establecer el token en el servicio ApiService
+          this.apiService.setAuthToken(encryptedToken);
           // Redirigir al usuario a la página deseada (por ejemplo, la página principal)
           this.router.navigate(['/']);
         } else {
